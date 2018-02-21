@@ -3,6 +3,7 @@ import config
 import MWMFlask.Main as Main
 import MWMFlask.utils.database.connection as database
 import MWMFlask.utils.database.users as user
+from MWMFlask.models.users import User
 
 # class TestMapsAPI(unittest.TestCase):
 #
@@ -75,8 +76,10 @@ class TestUsers(unittest.TestCase):
         self.assertFalse(user.valid_password("user_two@email.com", "wrong_user_two_password"))
 
     def test_get_corect_user_from_credentals(self):
-        user.get_user("ser_two@email.com")
-        pass
+        db_user = user.get_user("user_two@email.com")
+        test_user = User(email="user_two@email.com", confirmed=1, admin=0,
+                         first_name="Second", last_name="User", user_id=3)
+        self.assertEqual(db_user, test_user)
 
 
 if __name__ == '__main__':
