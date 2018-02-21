@@ -75,7 +75,7 @@ class TestUsers(unittest.TestCase):
     def test_validate_user_two_bad_password(self):
         self.assertFalse(user.valid_password("user_two@email.com", "wrong_user_two_password"))
 
-    def test_get_corect_user_from_credentals(self):
+    def test_get_correct_user_from_credentials(self):
         db_user = user.get_user("user_two@email.com")
         test_user = User(email="user_two@email.com", confirmed=1, admin=0,
                          first_name="Second", last_name="User", user_id=3)
