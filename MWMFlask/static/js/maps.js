@@ -24,9 +24,16 @@ function initMap() {
 
 function UserIcon(controlDiv, map) {
     // Set CSS for the control border.
-    var controlUI = document.createElement('div');
-    controlUI.classList.add("userIcon");
-    controlDiv.appendChild(controlUI);
+    // var iconUI = document.createElement('div');
+    // iconUI.classList.add("userIcon");
+    var iconUI = document.getElementById("userIcon");
+    controlDiv.appendChild(iconUI);
+
+    // var iconText = document.createElement('div');
+    // iconText.innerHTML = "<i class=\"far fa-user\"></i>";
+    // iconText.classList.add("userIconText");
+    // iconUI.appendChild(iconText)
+
 }
 
 function searchBar() {
