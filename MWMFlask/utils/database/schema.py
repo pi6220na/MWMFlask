@@ -21,7 +21,7 @@ INSERT INTO users ( email, email_confirmed, admin,
     VALUES (
         'admin_one@email.com',
         1,
-        0,
+        1,
         'Admin',
         'User',
         '$2b$12$GCu5uceKtCaGzfE0i7yJXOUDbPUlGO10eAx228xPPXR.DCDHpiGLe',

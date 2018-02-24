@@ -32,3 +32,9 @@ class User(object):
             return True
         else:
             return False
+
+    def is_confirmed(self):
+        if self.email_confirmed:
+            return True
+        else:
+            return False

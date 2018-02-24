@@ -1,0 +1,38 @@
+
+{% if session["logged_in"] %}
+
+<div id="userIcon" class="userIcon">
+    <div class="dropdown">
+        <button class="dropbtn userIconText"><i class="far fa-user"></i></button>
+        <div class="right dropdown-content">
+            <a href="javascript:void(0)">{{ session["first_name"] }}</a>
+            <a href="javascript:void(0)">ACCOUNT</a>
+            <a href="{{ url_for('logout') }}">LOGOUT</a>
+        </div>
+    </div>
+</div>
+
+<span id="login_modal"></span>
+<span id="signup_modal"></span>
+
+{% else %}
+
+<div id="userIcon" class="userIcon">
+    <div class="dropdown">
+        <button class="dropbtn userIconText"><i class="far fa-user"></i></button>
+        <div class="right dropdown-content">
+            <a href="javascript:void(0)" onclick="showModal('login_modal')">LOGIN</a>
+            <a href="javascript:void(0)" onclick="showModal('signup_modal')">SIGNUP</a>
+        </div>
+    </div>
+</div>
+
+{% with id="login_modal", title="Login", type="login" %}
+    {% include "modal.html" %}
+{% endwith %}
+
+{% with id="signup_modal", title="Signup", type="signup" %}
+    {% include "modal.html" %}
+{% endwith %}
+
+{% endif %}

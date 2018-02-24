@@ -11,6 +11,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
+    SECRET_KEY = "testing"
+
     # API Keys
     GOOGLE_MAP_KEY = os.environ['MAP_API']
 

@@ -5,19 +5,19 @@ from MWMFlask.utils.database.schema import test_users as users
 
 database_uri = app.config["DATABASE_URI"]
 
-db = sqlite3.connect(database_uri)
+db = sqlite3.connect(database_uri, check_same_thread=False)
 
 
 def execute_query(qry, params=None):
     if params:
-        with db.cursor() as cur:
-            try:
-                cur.execute(qry, params)
-                db.commit()
-            except sqlite3.Error as e:
-                db.rollback()
-                print("MySql Transaction error:\n" + str(e))
-                return e
+        cur = db.cursor()
+        try:
+            cur.execute(qry, params)
+            db.commit()
+        except sqlite3.Error as e:
+            db.rollback()
+            print("MySql Transaction error:\n" + str(e))
+            return e
     else:
         cur = db.cursor()
         try:

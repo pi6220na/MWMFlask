@@ -1,0 +1,33 @@
+<div id="{{ id }}" class="modal">
+    <div class="modal-window">
+        <div class="modal-menu-bar">
+            <span class="modal-menu-bar-text">
+                {{ title }}
+            </span>
+{#            <span class="modal-menu-bar-control">#}
+                <i class="fas fa-times modal-close" style="float: right; margin-right: .5em" onclick="closeModal(this)"></i>
+{#            </span>#}
+        </div>
+        <div class="modal-body">
+            {% if type == "login" %}
+                <form method="post" action="/login">
+                    <input name="email" type="text" placeholder="email"><br>
+                    <input name="password" type="password" placeholder="password"><br>
+                    <button class="modal-button">login</button>
+                    <span style="clear: both"></span>
+                </form>
+            {% elif type == "signup" %}
+                <form method="post" action="/signup">
+                    <input name="first" type="text" placeholder="First"><br>
+                    <input name="last" type="text" placeholder="Last"><br>
+                    <input name="email" type="text" placeholder="email"><br>
+                    <input name="password" type="password" placeholder="password"><br>
+                    <button class="modal-button">signup</button>
+                    <span style="clear: both"></span>
+                </form>
+            {% else %}
+                {{ message }}
+            {% endif %}
+        </div>
+    </div>
+</div>
