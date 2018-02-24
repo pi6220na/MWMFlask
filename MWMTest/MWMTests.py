@@ -1,6 +1,6 @@
 import unittest
 import config
-import MWMFlask.app as app
+from MWMFlask.Main import app
 import MWMFlask.utils.database.connection as database
 import MWMFlask.utils.database.users as user
 from MWMFlask.models.users import User
