@@ -35,5 +35,9 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
 
+    # database configuration
+    DATABASE_URI = "sqlite:///:memory:"
+
+
 
 del os

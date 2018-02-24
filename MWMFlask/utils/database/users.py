@@ -1,19 +1,23 @@
 from flask import session, redirect, url_for
-import MWMFlask.utils.database.connection as db
+from MWMFlask.utils.database import connection as db
+# import MWMFlask.utils.database.connection as db
 import MWMFlask.utils.secrets.users as secrets
 from MWMFlask.models.users import User
 import time
 
 
 def valid_password(user, password):
+    """ tests if the given password given matches the hash in the db for the given user """
     login_qry = "SELECT hash FROM users WHERE email = ?"
     hashed = db.get_rs(login_qry, (user,))[0]
     if secrets.checkpw(password, hashed):
         return True
-    return False
+    else:
+        return False
 
 
 def is_unique(email):
+    """ tests if the new email exists in the db """
     unique_query = "SELECT COUNT(*) FROM users WHERE email = ?"
     rs = db.get_rs(unique_query, (email,))
     if not rs[0]:
@@ -23,18 +27,21 @@ def is_unique(email):
 
 
 def user_exists(email):
+    """ tests if the user exists in the db """
     return not is_unique(email)
 
 
 def get_user(user):
-    user_qry = "SELECT email, email_confirmed, admin, first_name, last_name, rowid FROM users WHERE email = ?"
+    """ gets user from db and loads into an object """
+    user_qry = "SELECT email, email_confirmed, admin, first_name, last_name, user_id FROM users WHERE email = ?"
     rs = db.get_rs(user_qry, (user,))
-    print(rs)
     db_user = User(db_user=rs)
     return db_user
 
 
 def login(user, password):
+    """ does the login for the givens user and password and returns a success/fail message """
+    message = "Invalid username or password"
     if valid_password(user, password):
         if user_exists(user):
             db_user = get_user(user)
@@ -42,14 +49,13 @@ def login(user, password):
             message = "user successfully logged in"
             return {"error": False, "message": message}
         else:
-            message = "Invalid username or password"
             return {"error": False, "message": message}
     else:
-        message = "Invalid username or password"
         return {"error": False, "message": message}
 
 
 def start_session(user):
+    """ loads data from the user into the session vars """
     session["logged_in"] = True
     session["first_name"] = user.first_name
     session["last_name"] = user.last_name
@@ -83,5 +89,8 @@ def create(form_user):
 
 
 def end_session():
+    """ clears session data and returns a success message """
     session.clear()
-    return {"error": False, "message": "logged out"}
+    return {"error": False, "message": "User logged out."}
+
+

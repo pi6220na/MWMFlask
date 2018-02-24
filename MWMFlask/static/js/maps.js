@@ -27,10 +27,10 @@ function UserIcon(controlDiv, map) {
     // var iconUI = document.createElement('div');
     // iconUI.classList.add("userIcon");
     var iconUI = document.getElementById("userIcon");
-    var login = document.getElementById("login_modal");
-    var signup = document.getElementById("signup_modal");
+    // var login = document.getElementById("login_modal");
+    // var signup = document.getElementById("signup_modal");
     controlDiv.appendChild(iconUI);
-    controlDiv.appendChild(login)
+    // controlDiv.appendChild(login)
 
     // var iconText = document.createElement('div');
     // iconText.innerHTML = "<i class=\"far fa-user\"></i>";

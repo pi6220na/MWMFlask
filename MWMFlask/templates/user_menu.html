@@ -6,14 +6,17 @@
         <button class="dropbtn userIconText"><i class="far fa-user"></i></button>
         <div class="right dropdown-content">
             <a href="javascript:void(0)">{{ session["first_name"] }}</a>
+            {% if session["admin"] %}
+                <a href="javascript:void(0)">ADMIN</a>
+            {% endif %}
             <a href="javascript:void(0)">ACCOUNT</a>
             <a href="{{ url_for('logout') }}">LOGOUT</a>
         </div>
     </div>
 </div>
 
-<span id="login_modal"></span>
-<span id="signup_modal"></span>
+{#<span id="login_modal"></span>#}
+{#<span id="signup_modal"></span>#}
 
 {% else %}
 

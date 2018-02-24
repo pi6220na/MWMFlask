@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect
-from MWMFlask.utils.database import users
-# import MWMFlask.utils.database as db
 import config
 
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
 app.config.from_object(config_object)
+
+from MWMFlask.utils.database import users
 
 
 @app.route('/')

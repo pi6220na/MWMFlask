@@ -1,6 +1,7 @@
 drop_users = """DROP TABLE IF EXISTS users"""
 create_users = """
 CREATE TABLE users(
+    user_id INTEGER PRIMARY KEY,
     email VARCHAR(120) UNIQUE NOT NULL,
     email_confirmed SMALLINT NOT NULL DEFAULT 0,
     admin SMALLINT NOT NULL DEFAULT 0,

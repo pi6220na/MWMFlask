@@ -1,6 +1,6 @@
 import unittest
 import config
-import MWMFlask.Main as Main
+import MWMFlask.app as app
 import MWMFlask.utils.database.connection as database
 import MWMFlask.utils.database.users as user
 from MWMFlask.models.users import User
@@ -51,7 +51,7 @@ from MWMFlask.models.users import User
 
 class TestUsers(unittest.TestCase):
 
-    Main.config_object = config.TestingConfig
+    app.config_object = config.TestingConfig
 
     def setUp(self):
         database.init_db()
