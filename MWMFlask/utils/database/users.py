@@ -6,14 +6,22 @@ from MWMFlask.models.users import User
 import time
 
 
-def valid_password(user, password):
+def valid_password(email, password):
     """ tests if the given password given matches the hash in the db for the given user """
     login_qry = "SELECT hash FROM users WHERE email = ?"
-    hashed = db.get_rs(login_qry, (user,))[0]
+    hashed = db.get_rs(login_qry, (email,))[0]
     if secrets.checkpw(password, hashed):
         return True
     else:
         return False
+
+
+def update_password(email, password):
+    """ updates the password hash in the db for a given username """
+    hashed = secrets.hashpw(password)
+    update_qry = "UPDATE users SET hash = ? WHERE email = ?"
+    print(hashed)
+    db.execute_query(update_qry, (hashed, email))
 
 
 def is_unique(email):
@@ -49,9 +57,9 @@ def login(user, password):
             message = "user successfully logged in"
             return {"error": False, "message": message}
         else:
-            return {"error": False, "message": message}
+            return {"error": True, "message": message}
     else:
-        return {"error": False, "message": message}
+        return {"error": True, "message": message}
 
 
 def start_session(user):

@@ -27,8 +27,9 @@ class ProductionConfig(Config):
 
 # Overrides the default Config Object for Development
 class DevelopmentConfig(Config):
-    DATABASE_URI = os.path.join(_basedir, "MWMFlask.db")
     DEBUG = True
+
+    DATABASE_URI = os.path.join(_basedir, "MWMFlask.db")
 
 
 # Overrides the default Config Object for Testing
@@ -36,8 +37,7 @@ class TestingConfig(Config):
     TESTING = True
 
     # database configuration
-    DATABASE_URI = "sqlite:///:memory:"
-
+    DATABASE_URI =  os.path.join(_basedir, "TestDB.db")
 
 
 del os

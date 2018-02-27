@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{# Inserts Mep dependancies into the header on the index.html page #}
+{% block head %}
+{% endblock %}
+
+{# Inserts the map body into the index.html page#}
+{% block body %}
+    <form method="post" action="{{ url_for('update_password') }}">
+        <input name="old_password" type="text" placeholder="old password"><br>
+        <input name="new_password_a" type="text" placeholder="new password"><br>
+        <input name="new_password_b" type="text" placeholder="confirm password"><br>
+        <button>update</button>
+    </form>
+{% endblock %}

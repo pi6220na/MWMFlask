@@ -5,10 +5,10 @@ function initMap() {
         center: mpls,
         disableDefaultUI: true
     });
-    var marker = new google.maps.Marker({
-        position: mpls,
-        map: map
-    });
+    // var marker = new google.maps.Marker({
+    //     position: mpls,
+    //     map: map
+    // });
 
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
