@@ -10,15 +10,18 @@ function initMap() {
     //     map: map
     // });
 
+
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
     var userIconDiv = document.createElement('div');
+    var sideMenuDiv = document.createElement('div');
     var userIcon = new UserIcon(userIconDiv, map);
-
+    var sideMenu = new SideMenu(sideMenuDiv, map);
 
     userIconDiv.index = 1;
+    sideMenuDiv.index = 2;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
-
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
 }
 
 
@@ -38,6 +41,31 @@ function UserIcon(controlDiv, map) {
     // iconUI.appendChild(iconText)
 
 }
+
+function SideMenu(controlDiv, map) {
+    var menuUI = document.getElementById("side-menu");
+    controlDiv.appendChild(menuUI)
+}
+
+function expand_menu() {
+    toggle_collapsed();
+}
+
+function toggle_collapsed() {
+    var expandable = document.getElementById("expandable");
+    expandable.classList.toggle("collapsed");
+
+    var header = document.getElementById("side-menu-header");
+    header.classList.toggle("opaque");
+
+    var side = document.getElementById("side-menu");
+    side.classList.toggle("side-menu-border");
+}
+
+function do_search() {
+    alert("search");
+}
+
 
 function searchBar() {
     

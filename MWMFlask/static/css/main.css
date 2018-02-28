@@ -1,14 +1,19 @@
 /* Much of the CSS in this file was adapted from various W3 Schools Tutorials */
 
 :root {
+    /* measurements */
+    --side-offset: 1em;
+    --icon-font-size: 16px;
+    --icon-padding: 16px;
 
+
+    --side-menu-border-width: 2px;
 
     /* Border Radius Settings*/
     --circle-radius: 50%;
     --drop-down-radius: 8px;
 
     /* colors */
-
 
     --dark-main: #222222;
     --dark-accent: black;
@@ -45,14 +50,14 @@
     color: var(--dark-font);
     background: var(--light-font);
     /*border: 3px solid black;*/
-    margin: 1em;
+    margin: var(--side-offset);
     /*padding: 1em;*/
     /*z-index: 1000;*/
 
 }
 
 .userIconText {
-    font-size: 16px;
+    font-size: var(--icon-font-size);
     /*line-height: 38px;*/
     /*z-index: 1000;*/
 }
@@ -62,7 +67,7 @@
     background-color: var(--dark-main);
     border-radius: var(--circle-radius);
     color: var(--light-font);
-    padding: 16px;
+    padding: var(--icon-padding);
     /*font-size: 16px;*/
     border: none;
     cursor: pointer;
@@ -216,4 +221,85 @@
 .modal-close:hover {
     cursor: pointer;
     color: var(--dark-font);
+}
+
+#side-menu {
+    width: 33vw;
+    /*height: 100vh;*/
+    /*background-color: red;*/
+    min-width: 35em;
+
+}
+
+#burger-icon {
+    border: none;
+    background-color: transparent;
+    font-size: var(--icon-font-size);
+    padding: var(--side-offset);
+}
+
+#burger-icon:hover {
+    cursor: pointer;
+    background-color: var(--light-main);
+    color: var(--light-font);
+}
+
+#seatch-bar {
+    width: calc(100% - 10em);
+    border: 2px solid var(--dark-font);
+    margin-right: 0;
+}
+
+#search-btn {
+    border: none;
+    margin-right: 0;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+
+.side-menu-header {
+    /*padding-right: var(--side-offset);*/
+}
+
+.expandable {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--light-font);
+}
+
+.expandable-body {
+    /*background-color: green;*/
+    /*border: 2px deeppink solid;*/
+    padding: 2em;
+    position: absolute;
+    left: 0;
+    right: var(--side-menu-border-width);
+    top: 5em;
+    bottom: calc(5em + 4em);
+}
+
+.expandable-foot {
+    /*width: 100%;*/
+    position: absolute;
+    bottom: 4.8em;
+    left: 0;
+    right: var(--side-menu-border-width);
+    padding: 1em;
+    border-top: var(--side-menu-border-width) solid yellow;
+    background-color: var(--light-main);
+    text-align: right;
+}
+
+.opaque {
+    background-color: var(--light-main);
+
+}
+
+.collapsed {
+    display: none;
+}
+
+.side-menu-border {
+    border-right: var(--side-menu-border-width) solid purple;
 }

@@ -9,7 +9,7 @@
             {% if session["admin"] %}
                 <a href="javascript:void(0)">ADMIN</a>
             {% endif %}
-            <a href="javascript:void(0)">ACCOUNT</a>
+            <a href="{{ url_for('user') }}">ACCOUNT</a>
             <a href="{{ url_for('logout') }}">LOGOUT</a>
         </div>
     </div>
