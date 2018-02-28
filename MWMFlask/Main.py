@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
+from flask_api import status
 import config
 
 app = Flask(__name__)
@@ -17,16 +18,15 @@ def home():
 def login():
     if request.method == "POST":
         users.login(request.form["email"], request.form["password"])
-
-        return redirect(url_for("home"))
+        return redirect(url_for("home")), status.HTTP_200_OK
     else:
-        return redirect(url_for("home"))
+        return redirect(url_for("home")), status.HTTP_401_UNAUTHORIZED
 
 
 @app.route('/logout', methods=["POST", "GET"])
 def logout():
     users.end_session()
-    return redirect(url_for("home"))
+    return redirect(url_for("home")), status.HTTP_200_OK
 
 
 @app.route('/signup', methods=["POST", "GET"])
@@ -35,21 +35,18 @@ def signup():
         users.create(request.form)
         return redirect(url_for("home"))
     else:
-        return redirect(url_for("home"))
+        return redirect(url_for("home")), status.HTTP_405_METHOD_NOT_ALLOWED
 
 
 @app.route('/user', methods=["POST", "GET"])
 def user():
-    return render_template("users.html", title=app.config["APP_TITLE"])
+    return render_template("users.html", title=app.config["APP_TITLE"]), status.HTTP_200_OK
 
 
 @app.route('/user/update_password', methods=["POST", "GET"])
 def update_password():
     if request.method == "POST":
         if "logged_in" in session.keys() and session["logged_in"]:
-            print(request.method)
-            print(request.form)
-
             email = session["email"]
             old_pw = request.form["old_password"]
             new_a = request.form["new_password_a"]
@@ -59,17 +56,16 @@ def update_password():
                 if users.valid_password(email, old_pw):
                     users.update_password(email, new_a)
                 else:
-                    print("bad old password")
+                    flash("The old password did not match")
+                    return redirect(url_for("user")), status.HTTP_401_UNAUTHORIZED
             else:
-                print("didnt match")
-
-            # whatever logic you need to change the password
-
-            return redirect(url_for("user"))
+                flash("The new passwords did not match")
+                return redirect(url_for("user")), status.HTTP_400_BAD_REQUEST
+            return redirect(url_for("user")), status.HTTP_200_OK
         else:
-            return redirect(url_for("home"))
+            return redirect(url_for("home")), status.HTTP_401_UNAUTHORIZED
     else:
-        return redirect(url_for("user"))
+        return redirect(url_for("user")), status.HTTP_405_METHOD_NOT_ALLOWED
 
 
 if __name__ == '__main__':
