@@ -1,3 +1,4 @@
 gunicorn
 flask
 bcrypt
+flask_api

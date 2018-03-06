@@ -1,6 +1,7 @@
 class User(object):
     def __init__(self, email=None, confirmed=0, admin=0, first_name=None, last_name=None, user_id=None, db_user=None):
         if db_user is not None:
+            """ If creating user from db call unpack tuple """
             if isinstance(db_user, tuple):
                 self.user_id = db_user[5]
                 self.email = db_user[0]
@@ -11,6 +12,7 @@ class User(object):
             else:
                 raise TypeError
         else:
+            """ creating user from parameters """
             self.user_id = user_id
             self.email = email
             self.admin = admin

@@ -37,7 +37,7 @@ class TestingConfig(Config):
     TESTING = True
 
     # database configuration
-    DATABASE_URI =  os.path.join(_basedir, "TestDB.db")
+    DATABASE_URI = os.path.join(_basedir, "TestDB.db")
 
 
 del os
