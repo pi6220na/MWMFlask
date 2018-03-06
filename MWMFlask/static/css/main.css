@@ -193,7 +193,7 @@
 
 
 .modal-body {
-    background-color: white;
+    background-color: var(--light-font);
     padding: 1px;
 }
 
@@ -286,14 +286,14 @@
     left: 0;
     right: var(--side-menu-border-width);
     padding: 1em;
-    border-top: var(--side-menu-border-width) solid yellow;
+    border-top: var(--side-menu-border-width) solid var(--dark-main);
     background-color: var(--light-main);
     text-align: right;
 }
 
 .opaque {
     background-color: var(--light-main);
-
+    border-bottom: var(--side-menu-border-width) solid var(--dark-main);
 }
 
 .collapsed {
@@ -301,5 +301,5 @@
 }
 
 .side-menu-border {
-    border-right: var(--side-menu-border-width) solid purple;
+    border-right: var(--side-menu-border-width) solid var(--dark-main);
 }
