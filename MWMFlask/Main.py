@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash
+from MWMFlask.models.places import places
 from flask_api import status
 import config
 
@@ -11,7 +12,8 @@ from MWMFlask.utils.database import users
 
 @app.route('/')
 def home():
-    return render_template("index.html", title=app.config["APP_TITLE"], map_key=app.config["GOOGLE_MAP_KEY"])
+    return render_template("index.html", title=app.config["APP_TITLE"],
+                           places=places, map_key=app.config["GOOGLE_MAP_KEY"])
 
 
 @app.route('/login', methods=["POST", "GET"])
