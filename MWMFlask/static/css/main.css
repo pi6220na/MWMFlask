@@ -277,6 +277,7 @@
     right: var(--side-menu-border-width);
     top: 5em;
     bottom: calc(5em + 4em);
+    overflow-y: auto;
 }
 
 .expandable-foot {
