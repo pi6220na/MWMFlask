@@ -25,7 +25,7 @@ function initMap() {
     weatherMenuDiv.index = 3;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(weatherMenuDiv);
+    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
 }
 
 
