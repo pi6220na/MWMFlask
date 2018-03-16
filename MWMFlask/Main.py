@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, url_for, redirect, session, f
 import config
 import json
 
+from urllib.request import urlopen
+import json
+
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
 app.config.from_object(config_object)
@@ -14,8 +17,10 @@ from MWMFlask.utils.database import users
 
 @app.route('/')
 def home():
+    w_icon, w_date, w_conditions = w_forecast()
     return render_template("index.html", title=app.config["APP_TITLE"],
-                           places=places, map_key=app.config["GOOGLE_MAP_KEY"])
+                           places=places, map_key=app.config["GOOGLE_MAP_KEY"],
+                           w_icon=w_icon, w_date=w_date, w_conditions=w_conditions)
 
 
 @app.route('/login', methods=["POST", "GET"])
@@ -105,6 +110,28 @@ def update_password():
             return redirect(url_for("home")), status.HTTP_401_UNAUTHORIZED
     else:
         return redirect(url_for("user")), status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@app.route('/w_forecast', methods=["POST"])
+def w_forecast():
+
+    app.jinja_env.globals.update(w_forecast=w_forecast)
+
+    f = urlopen('http://api.wunderground.com/api/b27dbdfdaafdef52/forecast/q/MN/Minneapolis.json')
+    json_string = f.read()
+    parsed_json = json.loads(json_string)
+
+    w_icon = parsed_json['forecast']['simpleforecast']['forecastday'][0]['icon']
+    w_date = parsed_json['forecast']['simpleforecast']['forecastday'][0]['date']['weekday']
+    w_conditions = parsed_json['forecast']['simpleforecast']['forecastday'][0]['conditions']
+
+    f.close()
+
+    print('w_forecast was called, returning to index')
+    return w_icon, w_date, w_conditions
+
+    # return render_template("w_forecast_modal.html", w_icon=w_icon, w_date=w_date, w_conditions=w_conditions)
+
 
 
 if __name__ == '__main__':

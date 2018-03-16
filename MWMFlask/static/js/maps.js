@@ -13,18 +13,21 @@ function initMap() {
     // constructor passing in this DIV.
     var userIconDiv = document.createElement('div');
     var sideMenuDiv = document.createElement('div');
+    var weatherMenuDiv = document.createElement('div');
     var userIcon = new UserIcon(userIconDiv, map);
     var sideMenu = new SideMenu(sideMenuDiv, map);
+    var weatherMenu = new WeatherMenu(weatherMenuDiv, map);
 
     userIconDiv.index = 1;
     sideMenuDiv.index = 2;
+    weatherMenuDiv.index = 3;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
-
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(weatherMenuDiv);
 
     var infoWindow = new google.maps.InfoWindow;
-
     getGeolocation(infoWindow, map, getInitialPins);
+
 }
 
 
@@ -44,6 +47,11 @@ function UserIcon(controlDiv, map) {
 function SideMenu(controlDiv, map) {
     var menuUI = document.getElementById("side-menu");
     controlDiv.appendChild(menuUI)
+}
+
+function WeatherMenu(controlDiv, map) {
+    var weatherUI = document.getElementById("weather-menu");
+    controlDiv.appendChild(weatherUI)
 }
 
 function expand_menu() {
