@@ -1,6 +1,7 @@
 drop_users = """DROP TABLE IF EXISTS users"""
 drop_cache = """DROP TABLE IF EXISTS cache"""
 drop_cached_type = """DROP TABLE IF EXISTS cached_type"""
+drop_type_ids = """DROP TABLE IF EXISTS place_types"""
 
 create_users = """
 CREATE TABLE users(
@@ -32,17 +33,29 @@ CREATE TABLE cache(
 
 create_cached_type = """
 CREATE TABLE cached_type(
-    type_id INTEGER PRIMARY KEY,
-    place_id TEXT,
-    place_type TEXT NOT NULL,
+    -- cached_type_id INTEGER PRIMARY KEY,
+    place_id TEXT NOT NULL,
+    type_id INTEGER NOT NULL,
     CONSTRAINT fk_cache
         FOREIGN KEY (place_id)
         REFERENCES cache(place_id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    
+    CONSTRAINT fk_type
+        FOREIGN KEY (type_id)
+        REFERENCES types(type_id)
 )
 """
 
-schema = [drop_users, drop_cache, drop_cached_type, create_users, create_cache, create_cached_type]
+create_type_ids = """
+CREATE TABLE place_types(
+    type_id INTEGER PRIMARY KEY,
+    place_type TEXT NOT NULL
+)
+"""
+
+schema = [drop_users, drop_cache, drop_cached_type, drop_type_ids,
+          create_users, create_cache, create_cached_type, create_type_ids]
 
 admin_one = """
 INSERT INTO users ( email, email_confirmed, admin,
@@ -58,7 +71,6 @@ INSERT INTO users ( email, email_confirmed, admin,
     )
 """
 
-
 user_one = """
 INSERT INTO users ( email, email_confirmed, admin,
     first_name, last_name, hash, nonce_timestamp )
@@ -72,7 +84,6 @@ INSERT INTO users ( email, email_confirmed, admin,
         ''
     )
 """
-
 
 user_two = """
 INSERT INTO users ( email, email_confirmed, admin,

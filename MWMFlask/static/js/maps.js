@@ -8,16 +8,6 @@ function initMap() {
         disableDefaultUI: true,
         styles: style
     });
-    // var marker = new google.maps.Marker({
-    //     position: mpls,
-    //     map: map
-    // });
-
-    // alert("test");
-
-    // alert(style.toString());
-
-
 
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
@@ -34,28 +24,7 @@ function initMap() {
 
     var infoWindow = new google.maps.InfoWindow;
 
-    // getGeolocarion(infoWindow, map)
-
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);
-        }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-    }
-
-
+    getGeolocation(infoWindow, map, getInitialPins);
 }
 
 
@@ -69,10 +38,6 @@ function UserIcon(controlDiv, map) {
     controlDiv.appendChild(iconUI);
     // controlDiv.appendChild(login)
 
-    // var iconText = document.createElement('div');
-    // iconText.innerHTML = "<i class=\"far fa-user\"></i>";
-    // iconText.classList.add("userIconText");
-    // iconUI.appendChild(iconText)
 
 }
 
@@ -101,13 +66,15 @@ function do_search() {
 }
 
 
-function searchBar() {
-    
-}
+// function searchBar() {
+//
+// }
 
 
 // adapted from https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
-function getGeolocarion(infoWindow, map) {
+function getGeolocation(infoWindow, map, callback=null) {
+    let mpls = {lat: 45.000, lng: -93.265};
+
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -120,11 +87,16 @@ function getGeolocarion(infoWindow, map) {
         infoWindow.setContent('Location found.');
         infoWindow.open(map);
         map.setCenter(pos);
+        if (callback !== null) {
+            callback(pos, map);
+        }
         }, function() {
+            callback(mpls, map);
             handleLocationError(true, infoWindow, map.getCenter());
         });
     } else {
         // Browser doesn't support Geolocation
+        callback(mpls, map);
         handleLocationError(false, infoWindow, map.getCenter());
     }
 }
@@ -142,11 +114,9 @@ function updateMapPins() {
 
     var loc = [45.020459, -93.241592];
 
-    var key = "AIzaSyBnoAOkefgBP2J5_pHYLqrZIbmdLWM1dHc";
+    var key = document.getElementById("map_key").classList[0];
 
     getPlacesOfType("restaurant", loc, 500, key);
-
-    // alert(places_list);
 }
 
 function getCheckedPlacesList() {
@@ -165,6 +135,18 @@ function getCheckedPlacesList() {
 }
 
 function placePin(obj) {
+}
+
+function getInitialPins(location, map) {
+    // alert("in getInitialPins: ");
+    // alert(location["lat"]);
+
+    var lat = location["lat"];
+    var lng = location["lng"];
+
+    var types = ["bar", "restaurant"];
+
+    getPlacesFromCache(lat, lng, 10000, types, map, addPinsToMapFromJSON)
 
 }
 
@@ -181,11 +163,70 @@ function getPlacesOfType(type, loc, rad, key) {
 
 }
 
-// var lattitude = 45.020459;
-// var longetude = -93.241592;
-//
-// var type = "restaurant";
-// var radius = 500;
-// var key = "AIzaSyBnoAOkefgBP2J5_pHYLqrZIbmdLWM1dHc";
 
 
+// adapted from:
+// https://stackoverflow.com/questions/247483/http-get-request-in-javascript
+function getPlacesFromCache(lat, lng, rad, types, map, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+
+    var theUrl = "http://localhost:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
+    var types_qry = "";
+    if (types.length > 1) {
+        types_qry = "&types=" + types[0];
+        for (var i = 1; i < types.length; i++) {
+            types_qry += "-" + types[i]
+        }
+    } else if (types.length === 1) {
+        types_qry = "&types=" + types[0];
+    }
+
+    theUrl += types_qry;
+
+    // alert(theUrl);
+
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+            // alert("in async - if ");
+            callback(xmlHttp.responseText, map);
+    };
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
+
+function addPinsToMapFromJSON(json_str, map_obj) {
+    var json_obj = JSON.parse(json_str);
+
+    for (var i = 0; i < json_obj.length; i++) {
+
+        var mkr = json_obj[i];
+
+        // alert(JSON.stringify(mkr));
+
+        var contentString = mkr.name;
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+            position: mkr.location,
+            map: map,
+            title: mkr.name
+        });
+
+        marker.addListener('click', function() {
+            infowindow.open(map, marker);
+        });
+    }
+
+
+    // var marker = new google.maps.Marker({
+    //     position: mpls,
+    //     map: map
+    // });
+
+
+
+}
