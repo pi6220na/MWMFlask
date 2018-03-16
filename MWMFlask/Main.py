@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, url_for, redirect, session, f
 import config
 import json
 
-from urllib.request import urlopen
-import json
+
+# testing
 
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
@@ -13,14 +13,21 @@ from MWMFlask.models.places import places
 from flask_api import status
 from MWMFlask.utils.api import places as place_api
 from MWMFlask.utils.database import users
+from MWMFlask.utils.api import weather
+
+import logging.config
+#logging.basicConfig(filename='MWM.log', level=logging.INFO)
+#logging.config.fileConfig("../MWMFlask/utils/logs/log.conf")
+#logging.config.fileConfig("log.conf")
 
 
 @app.route('/')
 def home():
-    w_icon, w_date, w_conditions = w_forecast()
+    w_icon, w_date, w_conditions = weather.w_forecast()
+    w_mplsRadar = weather.w_radar()
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
-                           w_icon=w_icon, w_date=w_date, w_conditions=w_conditions)
+                           w_icon=w_icon, w_date=w_date, w_conditions=w_conditions, w_mplsRadar=w_mplsRadar)
 
 
 @app.route('/login', methods=["POST", "GET"])
@@ -112,27 +119,6 @@ def update_password():
         return redirect(url_for("user")), status.HTTP_405_METHOD_NOT_ALLOWED
 
 
-@app.route('/w_forecast', methods=["POST"])
-def w_forecast():
-
-    app.jinja_env.globals.update(w_forecast=w_forecast)
-
-    f = urlopen('http://api.wunderground.com/api/b27dbdfdaafdef52/forecast/q/MN/Minneapolis.json')
-    json_string = f.read()
-    parsed_json = json.loads(json_string)
-
-    w_icon = parsed_json['forecast']['simpleforecast']['forecastday'][0]['icon']
-    w_date = parsed_json['forecast']['simpleforecast']['forecastday'][0]['date']['weekday']
-    w_conditions = parsed_json['forecast']['simpleforecast']['forecastday'][0]['conditions']
-
-    f.close()
-
-    print('w_forecast was called, returning to index')
-    return w_icon, w_date, w_conditions
-
-    # return render_template("w_forecast_modal.html", w_icon=w_icon, w_date=w_date, w_conditions=w_conditions)
-
-
-
 if __name__ == '__main__':
+#    logging.debug("Starting main Flask program Main.py")
     app.run()

@@ -32,6 +32,10 @@
                     <p>Date: {{ w_date }}</p>
                     <p>Date: with an extra long and wide statement here to test popup size {{ w_conditions }}</p>
                 </form>
+            {% elif type == "w_radar" %}
+                <form method="post" action="/w_radar">
+                    <img src="{{ w_mplsRadar }}">
+                </form>
             {% else %}
                 {{ message }}
             {% endif %}

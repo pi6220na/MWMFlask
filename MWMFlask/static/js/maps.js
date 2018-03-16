@@ -23,13 +23,12 @@ function initMap() {
     weatherMenuDiv.index = 3;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(weatherMenuDiv);
+    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
 
     var infoWindow = new google.maps.InfoWindow;
     getGeolocation(infoWindow, map, getInitialPins);
 
 }
-
 
 function UserIcon(controlDiv, map) {
     // Set CSS for the control border.
@@ -80,25 +79,25 @@ function do_search() {
 
 
 // adapted from https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
-function getGeolocation(infoWindow, map, callback=null) {
+function getGeolocation(infoWindow, map, callback = null) {
     let mpls = {lat: 45.000, lng: -93.265};
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
 
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);
-        if (callback !== null) {
-            callback(pos, map);
-        }
-        }, function() {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+            if (callback !== null) {
+                callback(pos, map);
+            }
+        }, function () {
             callback(mpls, map);
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -112,8 +111,8 @@ function getGeolocation(infoWindow, map, callback=null) {
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
-                      'Error: The Geolocation service failed.' :
-                      'Error: Your browser doesn\'t support geolocation.');
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
 }
 
@@ -172,14 +171,12 @@ function getPlacesOfType(type, loc, rad, key) {
 }
 
 
-
 // adapted from:
 // https://stackoverflow.com/questions/247483/http-get-request-in-javascript
-function getPlacesFromCache(lat, lng, rad, types, map, callback)
-{
+function getPlacesFromCache(lat, lng, rad, types, map, callback) {
     var xmlHttp = new XMLHttpRequest();
 
-    var theUrl = "http://localhost:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
+    var theUrl = "http://127.0.0.1:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
     var types_qry = "";
     if (types.length > 1) {
         types_qry = "&types=" + types[0];
@@ -194,9 +191,9 @@ function getPlacesFromCache(lat, lng, rad, types, map, callback)
 
     // alert(theUrl);
 
-    xmlHttp.onreadystatechange = function() {
+    xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
-            // alert("in async - if ");
+        // alert("in async - if ");
             callback(xmlHttp.responseText, map);
     };
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
@@ -224,7 +221,7 @@ function addPinsToMapFromJSON(json_str, map_obj) {
             title: mkr.name
         });
 
-        marker.addListener('click', function() {
+        marker.addListener('click', function () {
             infowindow.open(map, marker);
         });
     }
@@ -236,5 +233,5 @@ function addPinsToMapFromJSON(json_str, map_obj) {
     // });
 
 
-
 }
+
