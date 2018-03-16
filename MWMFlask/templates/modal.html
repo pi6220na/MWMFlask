@@ -25,9 +25,22 @@
                     <button class="modal-button">signup</button>
                     <span style="clear: both"></span>
                 </form>
+            {% elif type == "w_forecast" %}
+                <form method="post" action="/w_forecast">
+                    <!-- <button class="modal-button">Get Forecast</button> -->
+                    <p>Condition: {{ w_icon }}</p>
+                    <p>Date: {{ w_date }}</p>
+                    <p>Date: with an extra long and wide statement here to test popup size {{ w_conditions }}</p>
+                </form>
+            {% elif type == "w_radar" %}
+                <form method="post" action="/w_radar">
+                    <img src="{{ w_mplsRadar }}">
+                </form>
             {% else %}
                 {{ message }}
             {% endif %}
         </div>
     </div>
 </div>
+
+

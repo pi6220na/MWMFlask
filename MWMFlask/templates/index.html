@@ -2,6 +2,8 @@
 
 {# Inserts Mep dependancies into the header on the index.html page #}
 {% block head %}
+    <span id="map_key" class="{{ map_key }}"></span>
+    <script src="{{ url_for('static', filename='js/map_style.js') }}" type="text/javascript"></script>
     <script src="{{ url_for('static', filename='js/maps.js') }}" type="text/javascript"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_key }}&callback=initMap"></script>
 {% endblock %}
@@ -10,5 +12,6 @@
 {% block body %}
     <div id="map"></div>
     {% include "user_menu.html" %}
+    {% include "weather_menu.html" %}
     {% include "side_menu.html" %}
 {% endblock %}
