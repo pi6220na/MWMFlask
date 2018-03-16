@@ -1,6 +1,8 @@
 from urllib.request import urlopen
 from MWMFlask.Main import app
 import json
+import requests
+
 # import logging
 # log = logging.getLogger(__name__)
 
@@ -31,10 +33,12 @@ def w_radar():
 
     app.jinja_env.globals.update(w_radar=w_radar)
 
-    w_mplsRadar = 'http://api.wunderground.com/api/b27dbdfdaafdef52/radar/image.gif?centerlat=45.0&centerlon=-93.265&radius=100&width=280&height=280&newmaps=1'
+    radar_url = 'http://api.wunderground.com/api/b27dbdfdaafdef52/radar/image.gif?centerlat=45.0&centerlon=-93.265&radius=100&width=280&height=280&newmaps=1'
 
-    print(w_mplsRadar)
+
+    print(radar_url)
+
 
     # log.info('w_radar was called, returning to index')
-    return w_mplsRadar
+    return radar_url
 

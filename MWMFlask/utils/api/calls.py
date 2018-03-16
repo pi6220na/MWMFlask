@@ -24,6 +24,7 @@ def get_places(location, radius):
     queried_places = []
     for t in places:
         qp = google_places_request(location, radius, t.types[0])
+        print(qp)
         for p in qp:
             queried_places.append(p)
     return queried_places
@@ -98,13 +99,19 @@ def google_places_request(location: (float, float), radius: int, place_type: str
 
     pl_type = place_type
 
+    print(pl_type)
+
     pl_url = "https://maps.googleapis.com/"
     pl_route = "maps/api/place/nearbysearch/"
     pl_query = "json?location={},{}&radius={}&type={}&key={}".format(user_lat, user_lng, search_rad, pl_type, api_key)
 
     places_req_url = build_request(pl_url, pl_route, pl_query)
 
+    print(places_req_url)
+
     response = requests.get(places_req_url)
+
+    print(response)
 
     results = response.json()["results"]
 
@@ -217,27 +224,35 @@ if __name__ == '__main__':
 
     print("test")
 
-    pl = get_place_by_id("ChIJP19AyX4ts1IRgll9l0HR8lk")
+    # pl = get_place_by_id("ChIJP19AyX4ts1IRgll9l0HR8lk")
 
-    print("place by id: ")
-    print(pl)
+    # print("place by id: ")
+    # print(pl)
 
-    # latitude = 45.020459
-    # lng = -93.241592
-    # rad = 10000
-    #
-    # cords = (latitude, lng)
-    # pl_list = places_request(cords, rad, "restaurant")
-    # # print("pl_list: ")
-    # # print(pl_list)
-    #
+    latitude = 44.973456
+    lng = -93.283136
+    rad = 10000
+
+    cords = (latitude, lng)
+
+
+    places_list = get_places(cords, rad)
+
+    print(places_list)
+
+    # pl_list = google_places_request(cords, rad, "restaurant")
+    # print("pl_list: ")
+    # print(pl_list)
+
+    # print(pl_list)
+
     # places_from_api = get_places(cords, rad)
     #
     # old_qry = "SELECT cache_id, place_id, cached_stamp FROM cache"
     # rs = db.get_rs(old_qry)
     #
     # print("get By radius: ")
-    # rs_one = get_by_radius(cords, 1)
+    # rs_one = get_cached_by_radius(cords, 1)
     # print(rs_one)
     # print("count:")
     # print(len(rs_one))
@@ -254,18 +269,18 @@ if __name__ == '__main__':
     # print("count:")
     # print(len(rs))
     #
-    # print("places from api: ")
-    # for p in places_from_api:
-    #     print(p.types)
-    #     print(p.name)
-    #     new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
-    #     db.execute_query(new_qry, p.get_database_args())
-    #
-    #     new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
-    #
-    #     for t in p.types:
-    #         if t in type_strings:
-    #             t_id = type_strings.index(t) + 1
-    #             db.execute_query(new_type_qry, (p.place_id, t_id))
-    #
-    #
+    print("places from api: ")
+    for p in places_list:
+        print(p.types)
+        print(p.name)
+        new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
+        db.execute_query(new_qry, p.get_database_args())
+
+        new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
+
+        for t in p.types:
+            if t in type_strings:
+                t_id = type_strings.index(t) + 1
+                db.execute_query(new_type_qry, (p.place_id, t_id))
+
+

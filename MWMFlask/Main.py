@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, url_for, redirect, session, f
 import config
 import json
 
-from MWMFlask.utils.api import weather
 
+# testing
 
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
@@ -13,6 +13,7 @@ from MWMFlask.models.places import places
 from flask_api import status
 from MWMFlask.utils.api import places as place_api
 from MWMFlask.utils.database import users
+from MWMFlask.utils.api import weather
 
 import logging.config
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)

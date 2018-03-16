@@ -28,48 +28,49 @@ function initMap() {
     var infoWindow = new google.maps.InfoWindow;
     getGeolocation(infoWindow, map, getInitialPins);
 
+}
 
-    function UserIcon(controlDiv, map) {
-        // Set CSS for the control border.
-        // var iconUI = document.createElement('div');
-        // iconUI.classList.add("userIcon");
-        var iconUI = document.getElementById("userIcon");
-        // var login = document.getElementById("login_modal");
-        // var signup = document.getElementById("signup_modal");
-        controlDiv.appendChild(iconUI);
-        // controlDiv.appendChild(login)
+function UserIcon(controlDiv, map) {
+    // Set CSS for the control border.
+    // var iconUI = document.createElement('div');
+    // iconUI.classList.add("userIcon");
+    var iconUI = document.getElementById("userIcon");
+    // var login = document.getElementById("login_modal");
+    // var signup = document.getElementById("signup_modal");
+    controlDiv.appendChild(iconUI);
+    // controlDiv.appendChild(login)
 
 
-    }
+}
 
-    function SideMenu(controlDiv, map) {
-        var menuUI = document.getElementById("side-menu");
-        controlDiv.appendChild(menuUI)
-    }
+function SideMenu(controlDiv, map) {
+    var menuUI = document.getElementById("side-menu");
+    controlDiv.appendChild(menuUI)
+}
 
-    function WeatherMenu(controlDiv, map) {
-        var weatherUI = document.getElementById("weather-menu");
-        controlDiv.appendChild(weatherUI)
-    }
+function WeatherMenu(controlDiv, map) {
+    var weatherUI = document.getElementById("weather-menu");
+    controlDiv.appendChild(weatherUI)
+}
 
-    function expand_menu() {
-        toggle_collapsed();
-    }
+function expand_menu() {
+    toggle_collapsed();
+}
 
-    function toggle_collapsed() {
-        var expandable = document.getElementById("expandable");
-        expandable.classList.toggle("collapsed");
+function toggle_collapsed() {
+    var expandable = document.getElementById("expandable");
+    expandable.classList.toggle("collapsed");
 
-        var header = document.getElementById("side-menu-header");
-        header.classList.toggle("opaque");
+    var header = document.getElementById("side-menu-header");
+    header.classList.toggle("opaque");
 
-        var side = document.getElementById("side-menu");
-        side.classList.toggle("side-menu-border");
-    }
+    var side = document.getElementById("side-menu");
+    side.classList.toggle("side-menu-border");
+}
 
-    function do_search() {
-        alert("search");
-    }
+function do_search() {
+    alert("search");
+}
 
 
 // function searchBar() {
@@ -78,160 +79,159 @@ function initMap() {
 
 
 // adapted from https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
-    function getGeolocation(infoWindow, map, callback = null) {
-        let mpls = {lat: 45.000, lng: -93.265};
+function getGeolocation(infoWindow, map, callback = null) {
+    let mpls = {lat: 45.000, lng: -93.265};
 
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
 
-                infoWindow.setPosition(pos);
-                infoWindow.setContent('Location found.');
-                infoWindow.open(map);
-                map.setCenter(pos);
-                if (callback !== null) {
-                    callback(pos, map);
-                }
-            }, function () {
-                callback(mpls, map);
-                handleLocationError(true, infoWindow, map.getCenter());
-            });
-        } else {
-            // Browser doesn't support Geolocation
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+            if (callback !== null) {
+                callback(pos, map);
+            }
+        }, function () {
             callback(mpls, map);
-            handleLocationError(false, infoWindow, map.getCenter());
-        }
+            handleLocationError(true, infoWindow, map.getCenter());
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        callback(mpls, map);
+        handleLocationError(false, infoWindow, map.getCenter());
     }
+}
 
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-            'Error: The Geolocation service failed.' :
-            'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-    }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+}
 
-    function updateMapPins() {
-        var places_list = getCheckedPlacesList();
+function updateMapPins() {
+    var places_list = getCheckedPlacesList();
 
-        var loc = [45.020459, -93.241592];
+    var loc = [45.020459, -93.241592];
 
-        var key = document.getElementById("map_key").classList[0];
+    var key = document.getElementById("map_key").classList[0];
 
-        getPlacesOfType("restaurant", loc, 500, key);
-    }
+    getPlacesOfType("restaurant", loc, 500, key);
+}
 
-    function getCheckedPlacesList() {
-        var place_types = [];
-        var inputs = document.getElementsByTagName("input");
+function getCheckedPlacesList() {
+    var place_types = [];
+    var inputs = document.getElementsByTagName("input");
 
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].type === "checkbox") {
-                if (inputs[i].checked) {
-                    place_types.push(inputs[i].name)
-                }
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type === "checkbox") {
+            if (inputs[i].checked) {
+                place_types.push(inputs[i].name)
             }
         }
-
-        return place_types;
     }
 
-    function placePin(obj) {
-    }
+    return place_types;
+}
 
-    function getInitialPins(location, map) {
-        // alert("in getInitialPins: ");
-        // alert(location["lat"]);
+function placePin(obj) {
+}
 
-        var lat = location["lat"];
-        var lng = location["lng"];
+function getInitialPins(location, map) {
+    // alert("in getInitialPins: ");
+    // alert(location["lat"]);
 
-        var types = ["bar", "restaurant"];
+    var lat = location["lat"];
+    var lng = location["lng"];
 
-        getPlacesFromCache(lat, lng, 10000, types, map, addPinsToMapFromJSON)
+    var types = ["bar", "restaurant"];
 
-    }
+    getPlacesFromCache(lat, lng, 10000, types, map, addPinsToMapFromJSON)
 
-    function getPlacesOfType(type, loc, rad, key) {
+}
 
-        var query_string = `json?location=${loc[0]},${loc[1]}&radius=${rad}&type=${type}&key=${key}`;
+function getPlacesOfType(type, loc, rad, key) {
 
-        var api_url = `https://maps.googleapis.com/maps/api/place/nearbysearch/${query_string}`;
+    var query_string = `json?location=${loc[0]},${loc[1]}&radius=${rad}&type=${type}&key=${key}`;
 
-        alert("in new get pl");
+    var api_url = `https://maps.googleapis.com/maps/api/place/nearbysearch/${query_string}`;
 
-        // alert(query_string);
-        alert(api_url);
+    alert("in new get pl");
 
-    }
+    // alert(query_string);
+    alert(api_url);
+
+}
 
 
 // adapted from:
 // https://stackoverflow.com/questions/247483/http-get-request-in-javascript
-    function getPlacesFromCache(lat, lng, rad, types, map, callback) {
-        var xmlHttp = new XMLHttpRequest();
+function getPlacesFromCache(lat, lng, rad, types, map, callback) {
+    var xmlHttp = new XMLHttpRequest();
 
-        var theUrl = "http://localhost:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
-        var types_qry = "";
-        if (types.length > 1) {
-            types_qry = "&types=" + types[0];
-            for (var i = 1; i < types.length; i++) {
-                types_qry += "-" + types[i]
-            }
-        } else if (types.length === 1) {
-            types_qry = "&types=" + types[0];
+    var theUrl = "http://127.0.0.1:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
+    var types_qry = "";
+    if (types.length > 1) {
+        types_qry = "&types=" + types[0];
+        for (var i = 1; i < types.length; i++) {
+            types_qry += "-" + types[i]
         }
-
-        theUrl += types_qry;
-
-        // alert(theUrl);
-
-        xmlHttp.onreadystatechange = function () {
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
-            // alert("in async - if ");
-                callback(xmlHttp.responseText, map);
-        };
-        xmlHttp.open("GET", theUrl, true); // true for asynchronous
-        xmlHttp.send(null);
+    } else if (types.length === 1) {
+        types_qry = "&types=" + types[0];
     }
 
-    function addPinsToMapFromJSON(json_str, map_obj) {
-        var json_obj = JSON.parse(json_str);
+    theUrl += types_qry;
 
-        for (var i = 0; i < json_obj.length; i++) {
+    // alert(theUrl);
 
-            var mkr = json_obj[i];
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+        // alert("in async - if ");
+            callback(xmlHttp.responseText, map);
+    };
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
 
-            // alert(JSON.stringify(mkr));
+function addPinsToMapFromJSON(json_str, map_obj) {
+    var json_obj = JSON.parse(json_str);
 
-            var contentString = mkr.name;
+    for (var i = 0; i < json_obj.length; i++) {
 
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
+        var mkr = json_obj[i];
 
-            var marker = new google.maps.Marker({
-                position: mkr.location,
-                map: map,
-                title: mkr.name
-            });
+        // alert(JSON.stringify(mkr));
 
-            marker.addListener('click', function () {
-                infowindow.open(map, marker);
-            });
-        }
+        var contentString = mkr.name;
 
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
 
-        // var marker = new google.maps.Marker({
-        //     position: mpls,
-        //     map: map
-        // });
+        var marker = new google.maps.Marker({
+            position: mkr.location,
+            map: map,
+            title: mkr.name
+        });
 
-
+        marker.addListener('click', function () {
+            infowindow.open(map, marker);
+        });
     }
+
+
+    // var marker = new google.maps.Marker({
+    //     position: mpls,
+    //     map: map
+    // });
+
 
 }
+
