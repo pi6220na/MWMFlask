@@ -1,209 +1,145 @@
+from time import time
+from datetime import datetime
+import datetime
+import json
+
+
 class Place(object):
-    def __init__(self, place_name, place_type=None):
+    def __init__(self, place_name: str=None, place_id: str=None, location=None, address: str=None,
+                 place_types: [str]=None, created: datetime=None):
         self.name = place_name
-        self.type = place_type
-
-
-class Dining(Place):
-    def __init__(self, dining_name, place_type="dining"):
-        super().__init__(dining_name)
-        self.type = place_type
-
-
-class Restaurant(Dining):
-    def __init__(self, restaurant_name):
-        super().__init__(restaurant_name)
-        self.type = "restaurant"
-
-
-class Cafe(Dining):
-    def __init__(self, cafe_name):
-        super().__init__(cafe_name)
-        self.type = "cafe"
-
-
-class Takeout(Dining):
-    def __init__(self, meal_takeaway_name):
-        super().__init__(meal_takeaway_name)
-        self.type = "meal_takeaway"
-
-
-class Bakery(Dining):
-    def __init__(self, bakery_name):
-        super().__init__(bakery_name)
-        self.type = "bakery"
-
-
-class Nightlife(Place):
-    def __init__(self, nightlife_name, place_type="nightlife"):
-        super().__init__(nightlife_name)
-        self.type = place_type
-
-
-class Nightclub(Nightlife):
-    def __init__(self, night_club_name):
-        super().__init__(night_club_name)
-        self.type = "night_club"
-
-
-class Bar(Nightlife):
-    def __init__(self, bar_name):
-        super().__init__(bar_name)
-        self.type = "bar"
-
-
-class Art(Place):
-    def __init__(self, art_name):
-        super().__init__(art_name)
-
-
-class Gallery(Place):
-    def __init__(self, gallery_name):
-        super().__init__(gallery_name)
-        self.type = "art_gallery"
-
-
-class Museum(Place):
-    def __init__(self, museum_name):
-        super().__init__(museum_name)
-        self.type = "museum"
-
-
-class MovieTheater(Place):
-    def __init__(self, theater_name):
-        super().__init__(theater_name)
-        self.type = "movie_theater"
-
-
-class Religious(Place):
-    def __init__(self, religious_name, place_type="religious"):
-        super().__init__(religious_name)
-        self.type = place_type
-
-
-class Church(Religious):
-    def __init__(self, church_name):
-        super().__init__(church_name)
-        self.type = "church"
-
-
-class Temple(Religious):
-    def __init__(self, temple_name):
-        super().__init__(temple_name)
-        self.type = "hindu_temple"
-
-
-class Mosque(Religious):
-    def __init__(self, mosque_name):
-        super().__init__(mosque_name)
-        self.type = "mosque"
-
-
-class Synagogue(Religious):
-    def __init__(self, synagogue_name):
-        super().__init__(synagogue_name)
-        self.type = "synagogue"
-
-
-class Transport(Place):
-    def __init__(self, transportation_name, place_type="transportation"):
-        super().__init__(transportation_name)
-        self.type = place_type
-
-
-class Parking(Transport):
-    def __init__(self, parking_name):
-        super().__init__(parking_name)
-        self.type = "parking"
-
-
-class BusStation(Transport):
-    def __init__(self, bus_station_name):
-        super().__init__(bus_station_name)
-        self.type = "bus_station"
-
-
-class SubwayStation(Transport):
-    def __init__(self, subway_station_name):
-        super().__init__(subway_station_name)
-        self.type = "subway_station"
-
-
-class Athletic(Place):
-    def __init__(self, athletic_name, place_type="athletic"):
-        super().__init__(athletic_name)
-        self.type = place_type
-
-
-class BowlingAlley(Athletic):
-    def __init__(self, bowling_alley_name):
-        super().__init__(bowling_alley_name)
-        self.type = "bowling_alley"
-
-
-class Stadium(Athletic):
-    def __init__(self, stadium_name):
-        super().__init__(stadium_name)
-        self.type = "stadium"
-
-
-class Outdoor(Place):
-    def __init__(self, park_name, place_type="park"):
-        super().__init__(park_name)
-        self.type = place_type
-
-
-class AmusementPark(Outdoor):
-    def __init__(self, amusement_park_name):
-        super().__init__(amusement_park_name)
-        self.type = "amusement_park"
-
-
-class Aquarium(Outdoor):
-    def __init__(self, aquarium_name):
-        super().__init__(aquarium_name)
-        self.type = "aquarium"
-
-
-class Zoo(Outdoor):
-    def __init__(self, zoo_name):
-        super().__init__(zoo_name)
-        self.type = "zoo"
-
-
-class Park(Outdoor):
-    def __init__(self, park_name):
-        super().__init__(park_name)
-        self.type = "park"
-
-
-places = [Church("Churches"),
-          Temple("Hindu Temple"),
-          Mosque("Mosques"),
-          Synagogue("Synagogue"),
-
-          AmusementPark("Amusement Parks"),
-          Aquarium("Aquariums"),
-          Park("Parks"),
-          Zoo("Zoos"),
-
-          Nightclub("Night Clubs"),
-          Bar("Bars"),
-
-          Gallery("Art Galleries"),
-          MovieTheater("Movie Theaters"),
-          Museum("Museums"),
-
-          Bakery("Bakeries"),
-          Restaurant("Restaurant"),
-          Cafe("Cafes"),
-          Takeout("Takeout Restaurants"),
-
-          BowlingAlley("Bowling Alleys"),
-          Stadium("Stadiums"),
-
-          Parking("Parking"),
-          BusStation("Bus Stations"),
-          SubwayStation("Subway Stations")
+        self.types = place_types
+        self.address = address
+        self.place_id = place_id
+        if created is not None:
+            if isinstance(created, datetime.datetime):
+                self.created = created
+            else:
+                self.created = datetime.datetime.now()
+        else:
+            self.created = datetime.datetime.now()
+
+        # still in progress
+        if location is not None:
+            if isinstance(location, tuple):
+                self.latitude = round(location[0], 7)
+                self.longitude = round(location[1], 7)
+            if isinstance(location, dict):
+                self.latitude = round(location["lat"], 7)
+                self.longitude = round(location["lng"], 7)
+
+    def __str__(self) -> str:
+        return json.dumps(self.to_json())
+        # return "need to implement __str__"
+
+    def __repr__(self) -> str:
+        return "<Place object at {}>".format(hex(id(self)))
+
+    def __eq__(self, other) -> bool:
+        return self.place_id == other.place_id
+
+    def __hash__(self) -> int:
+        return hash(('place_id', self.place_id))
+
+    def cache_expired(self):
+        if datetime.datetime.now() - self.created > datetime.timedelta(hours=1):
+            return True
+        else:
+            return False
+
+    def to_json(self):
+        return {'name': self.name, 'place_id': self.place_id, 'address': self.address,
+                'location': {'lat': self.latitude, 'lng': self.longitude},
+                'place_types': self.types, 'created': str(self.created).split(".")[0]}
+
+    def update_cache(self):
+        pass
+
+    def get_database_args(self) -> tuple:
+        return self.name, self.place_id, self.latitude, self.longitude, self.address
+
+
+places = [Place("Churches", place_types=["church"]),
+          Place("Hindu Temple", place_types=["hindu_temple"]),
+          Place("Mosques", place_types=["mosque"]),
+          Place("Synagogue", place_types=["synagogue"]),
+
+          Place("Amusement Parks", place_types=["amusement_park"]),
+          Place("Aquariums", place_types=["aquarium"]),
+          Place("Parks", place_types=["park"]),
+          Place("Zoos", place_types=["zoo"]),
+
+          Place("Night Clubs", place_types=["night_club"]),
+          Place("Bars", place_types=["bar"]),
+
+          Place("Art Galleries", place_types=["art_gallery"]),
+          Place("Movie Theaters", place_types=["movie_theater"]),
+          Place("Museums", place_types=["museum"]),
+
+          Place("Bakeries", place_types=["bakery"]),
+          Place("Restaurant", place_types=["restaurant"]),
+          Place("Cafes", place_types=["cafe"]),
+          Place("Takeout Restaurants", place_types=["meal_takeaway"]),
+
+          Place("Bowling Alleys", place_types=["bowling_alley"]),
+          Place("Stadiums", place_types=["stadium"]),
+
+          Place("Parking", place_types=["parking"]),
+          Place("Bus Stations", place_types=["bus_station"]),
+          Place("Subway Stations", place_types=["subway_station"])
           ]
+
+
+type_strings = ["church",
+                "hindu_temple",
+                "mosque",
+                "synagogue",
+
+                "amusement_park",
+                "aquarium",
+                "park",
+                "zoo",
+
+                "night_club",
+                "bar",
+
+                "art_gallery",
+                "movie_theater",
+                "museum",
+
+                "bakery",
+                "restaurant",
+                "cafe",
+                "meal_takeaway",
+
+                "bowling_alley",
+                "stadium",
+
+                "parking",
+                "bus_station",
+                "subway_station"]
+
+
+if __name__ == '__main__':
+
+    one_hour_and_a_half_ago = datetime.datetime.now() - datetime.timedelta(hours=1, minutes=30)
+    now = datetime.datetime.now()
+    half_hour_ago = datetime.datetime.now() - datetime.timedelta(minutes=30)
+
+    # print(type(one_hour_and_a_half_ago))
+
+    place_one = Place("Place One: ", created=one_hour_and_a_half_ago)
+    place_two = Place("Place Two: ", created=half_hour_ago)
+
+    print(place_one.name)
+    print(place_one.cache_expired())
+
+    if place_one.cache_expired():
+        print(place_one.name)
+        print("expired")
+
+    if place_two.cache_expired():
+        print(place_two.name)
+        print("not expired")
+
 
