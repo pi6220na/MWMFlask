@@ -69,6 +69,9 @@
                         <p>Wind Direction: {{ list['wc_wind_dir']}}</p>
                         <p>Wind Speed: {{ list['wc_wind_mph']}}mph</p>
                         <br><br>
+                        <div class="a">
+                            <img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" width="200">
+                        </div>
                     {% endfor %}
                 </form>
             {% elif type == "w_forecast" %}
@@ -112,6 +115,9 @@
                         <p>Avg. Humidity: {{ list['w_avehumidity']}}%</p>
                         <br><br>
                     {% endfor %}
+                    <div class="a">
+                        <img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" width="200">
+                    </div>
                 </form>
             {% elif type == "w_radar" %}
                 <style>
