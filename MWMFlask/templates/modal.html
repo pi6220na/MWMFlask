@@ -26,16 +26,80 @@
                     <span style="clear: both"></span>
                 </form>
             {% elif type == "w_forecast" %}
+                <style>
+                    /* Modal text */
+                   h3 {
+                        display: block;
+                        font-size: 1.17em;
+                        margin-top: 1em;
+                        margin-bottom: 1em;
+                        margin-left: 0;
+                        margin-right: 0;
+                        font-weight: bold;
+                    }
+                    div.a {
+                        text-align: center;
+                    }
+                    div.b {
+                        text-align: left;
+                    }
+                    div.c {
+                        text-align: right;
+                    }
+                    div.d {
+                        text-align: justify;
+                    }
+                </style>
                 <form method="post" action="/w_forecast">
-                    <!-- <button class="modal-button">Get Forecast</button> -->
-                    <p>Condition: {{ w_icon }}</p>
-                    <p>Date: {{ w_date }}</p>
-                    <p>Date: with an extra long and wide statement here to test popup size {{ w_conditions }}</p>
+                    <div class="a">
+                        <h3>Forecast Conditions</h3>
+                    </div>
+                    {% for list in w_list %}
+                        <p>Date/Time: {{ list['w_date']}}</p>
+                        <p>Week Day: {{ list['w_day']}}</p>
+                        <p>Conditions: {{ list['w_conditions']}}</p>
+                        <img src="{{ list['w_conditions_url']}}">
+                        <p>High Temp(f): {{ list['w_high_temp']}}</p>
+                        <p>Low Temp(f): {{ list['w_low_temp']}}</p>
+                        <p>Wind Direction: {{ list['w_wind_dir']}}</p>
+                        <p>Wind Speed: {{ list['w_wind_speed']}}mph</p>
+                        <p>Avg. Humidity: {{ list['w_avehumidity']}}%</p>
+                        <br><br>
+                    {% endfor %}
                 </form>
             {% elif type == "w_radar" %}
-                <form method="post" action="/w_radar">
-                    <img src="{{ w_mplsRadar }}">
-                </form>
+                <style>
+                    /* Modal text */
+                   h3 {
+                        display: block;
+                        font-size: 1.17em;
+                        margin-top: 1em;
+                        margin-bottom: 1em;
+                        margin-left: 0;
+                        margin-right: 0;
+                        font-weight: bold;
+                    }
+                    div.a {
+                        text-align: center;
+                    }
+                    div.b {
+                        text-align: left;
+                    }
+                    div.c {
+                        text-align: right;
+                    }
+                    div.d {
+                        text-align: justify;
+                    }
+                </style>
+                <div style="min-width: auto">
+                    <form method="post" action="/w_radar">
+                        <div class="a">
+                            <h3>Weather Radar</h3>
+                        </div>
+                        <img src="{{ w_mplsRadar }}">
+                    </form>
+                </div>
             {% else %}
                 {{ message }}
             {% endif %}
