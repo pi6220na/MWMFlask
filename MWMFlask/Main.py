@@ -1,9 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify
 import config
-import json
-
-
-# testing
 
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
@@ -17,28 +13,18 @@ from MWMFlask.utils.api import weather
 
 import logging.config
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)
-
 import os
-dir_path = os.path.dirname(os.path.realpath(__file__))
-cwd = os.getcwd()
-
-print("full directory: " + dir_path)
-print("working directory: " + cwd)
-print("basedir: " + config._basedir)
-
-
 logging_conf = os.path.join(config._basedir + '\\MWMFlask\\utils\\logs\\log.conf')
 logging.config.fileConfig(logging_conf)
 
 
-
 @app.route('/')
 def home():
-    w_icon, w_date, w_conditions = weather.w_forecast()
+    w_list = weather.w_forecast()
     w_mplsRadar = weather.w_radar()
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
-                           w_icon=w_icon, w_date=w_date, w_conditions=w_conditions, w_mplsRadar=w_mplsRadar)
+                           w_list=w_list, w_mplsRadar=w_mplsRadar)
 
 
 @app.route('/login', methods=["POST", "GET"])
