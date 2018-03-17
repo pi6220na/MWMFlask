@@ -20,11 +20,13 @@ logging.config.fileConfig(logging_conf)
 
 @app.route('/')
 def home():
+    w_curr = weather.w_current()
     w_list = weather.w_forecast()
     w_mplsRadar = weather.w_radar()
+    logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
-                           w_list=w_list, w_mplsRadar=w_mplsRadar)
+                           w_curr=w_curr, w_list=w_list, w_mplsRadar=w_mplsRadar)
 
 
 @app.route('/login', methods=["POST", "GET"])

@@ -25,6 +25,52 @@
                     <button class="modal-button">signup</button>
                     <span style="clear: both"></span>
                 </form>
+            {% elif type == "w_current" %}
+                <style>
+                    /* Modal text */
+                   h3 {
+                        display: block;
+                        font-size: 1.17em;
+                        margin-top: 1em;
+                        margin-bottom: 1em;
+                        margin-left: 0;
+                        margin-right: 0;
+                        font-weight: bold;
+                    }
+                    div.a {
+                        text-align: center;
+                    }
+                    div.b {
+                        text-align: left;
+                    }
+                    div.c {
+                        text-align: right;
+                    }
+                    div.d {
+                        text-align: justify;
+                    }
+                </style>
+                <form method="post" action="/w_current">
+                    <div class="a">
+                        <h3>Current Conditions</h3>
+                    </div>
+                    {% for list in w_curr %}
+                        <p>Date/Time: {{ list['wc_date_time']}}</p>
+                        <p>Location: {{ list['wc_disp_location']}}</p>
+                        <p>Latitude: {{ list['wc_lat']}}</p>
+                        <p>Longitude: {{ list['wc_lon']}}</p>
+                        <p>Conditions: {{ list['wc_condition']}}</p>
+                        <img src="{{ list['wc_condition_url']}}">
+                        <p>Temp(f): {{ list['wc_temp_f']}}</p>
+                        <p>Heat Index(f): {{ list['wc_heat_index']}}</p>
+                        <p>Wind Chill(f): {{ list['wc_wind_chill']}}</p>
+                        <p>Baro Pressure(in): {{ list['wc_pressure_in']}}</p>
+                        <p>Relative Humidity: {{ list['wc_rel_humidity']}}</p>
+                        <p>Wind Direction: {{ list['wc_wind_dir']}}</p>
+                        <p>Wind Speed: {{ list['wc_wind_mph']}}mph</p>
+                        <br><br>
+                    {% endfor %}
+                </form>
             {% elif type == "w_forecast" %}
                 <style>
                     /* Modal text */
