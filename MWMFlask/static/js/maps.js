@@ -14,16 +14,20 @@ function initMap() {
     var userIconDiv = document.createElement('div');
     var sideMenuDiv = document.createElement('div');
     var weatherMenuDiv = document.createElement('div');
+    var helperMenuDiv = document.createElement('div');
     var userIcon = new UserIcon(userIconDiv, map);
     var sideMenu = new SideMenu(sideMenuDiv, map);
     var weatherMenu = new WeatherMenu(weatherMenuDiv, map);
+    var helperMenu = new HelperMenu(helperMenuDiv, map);
 
     userIconDiv.index = 1;
     sideMenuDiv.index = 2;
     weatherMenuDiv.index = 3;
+    helperMenuDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
     map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(helperMenuDiv);
 
     var infoWindow = new google.maps.InfoWindow;
     getGeolocation(infoWindow, map, getInitialPins);
@@ -39,8 +43,6 @@ function UserIcon(controlDiv, map) {
     // var signup = document.getElementById("signup_modal");
     controlDiv.appendChild(iconUI);
     // controlDiv.appendChild(login)
-
-
 }
 
 function SideMenu(controlDiv, map) {
@@ -52,6 +54,12 @@ function WeatherMenu(controlDiv, map) {
     var weatherUI = document.getElementById("weather-menu");
     controlDiv.appendChild(weatherUI)
 }
+
+function HelperMenu(controlDiv, map) {
+    var helperUI = document.getElementById("helper-menu");
+    controlDiv.appendChild(helperUI)
+}
+
 
 function expand_menu() {
     toggle_collapsed();

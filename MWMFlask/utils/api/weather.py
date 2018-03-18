@@ -3,7 +3,6 @@ from urllib.error import URLError
 from MWMFlask.Main import app
 import json
 from cachepy import *
-import threading
 from multiprocessing.pool import ThreadPool
 import logging
 import logging.config
@@ -12,7 +11,6 @@ log = logging.getLogger(__name__)
 api_key = app.config["WEATHER_DATA_KEY"]
 
 cache_with_ttl = Cache(ttl=60) # ttl given in seconds
-
 
 
 def w_forecast():
