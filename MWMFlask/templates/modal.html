@@ -26,30 +26,6 @@
                     <span style="clear: both"></span>
                 </form>
             {% elif type == "w_current" %}
-                <style>
-                    /* Modal text */
-                   h3 {
-                        display: block;
-                        font-size: 1.17em;
-                        margin-top: 1em;
-                        margin-bottom: 1em;
-                        margin-left: 0;
-                        margin-right: 0;
-                        font-weight: bold;
-                    }
-                    div.a {
-                        text-align: center;
-                    }
-                    div.b {
-                        text-align: left;
-                    }
-                    div.c {
-                        text-align: right;
-                    }
-                    div.d {
-                        text-align: justify;
-                    }
-                </style>
                 <form method="post" action="/w_current">
                     <div class="a">
                         <h3>Current Conditions</h3>
@@ -75,30 +51,6 @@
                     {% endfor %}
                 </form>
             {% elif type == "w_forecast" %}
-                <style>
-                    /* Modal text */
-                   h3 {
-                        display: block;
-                        font-size: 1.17em;
-                        margin-top: 1em;
-                        margin-bottom: 1em;
-                        margin-left: 0;
-                        margin-right: 0;
-                        font-weight: bold;
-                    }
-                    div.a {
-                        text-align: center;
-                    }
-                    div.b {
-                        text-align: left;
-                    }
-                    div.c {
-                        text-align: right;
-                    }
-                    div.d {
-                        text-align: justify;
-                    }
-                </style>
                 <form method="post" action="/w_forecast">
                     <div class="a">
                         <h3>Forecast Conditions</h3>
@@ -120,30 +72,6 @@
                     </div>
                 </form>
             {% elif type == "w_radar" %}
-                <style>
-                    /* Modal text */
-                   h3 {
-                        display: block;
-                        font-size: 1.17em;
-                        margin-top: 1em;
-                        margin-bottom: 1em;
-                        margin-left: 0;
-                        margin-right: 0;
-                        font-weight: bold;
-                    }
-                    div.a {
-                        text-align: center;
-                    }
-                    div.b {
-                        text-align: left;
-                    }
-                    div.c {
-                        text-align: right;
-                    }
-                    div.d {
-                        text-align: justify;
-                    }
-                </style>
                 <div style="min-width: auto">
                     <form method="post" action="/w_radar">
                         <div class="a">
@@ -151,6 +79,12 @@
                         </div>
                         <img src="{{ w_mplsRadar }}">
                     </form>
+                </div>
+             {% elif type == "MWM_help" %}
+                <div style="min-width: auto">
+                    <div class="a">
+                        {% include "help_window.html" %}
+                    </div>
                 </div>
             {% else %}
                 {{ message }}

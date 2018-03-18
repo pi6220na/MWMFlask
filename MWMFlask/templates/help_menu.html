@@ -1,0 +1,12 @@
+<div id="helper-menu">
+    <div class="dropdown">
+        <button class="dropbtn userIconText"><i class="fas fa-question-circle"></i></button>
+        <div class="right dropdown-content">
+            <a href="javascript:void(0)" onclick="showModal('MWM_help')">HELP</a>
+        </div>
+    </div>
+</div>
+
+{% with id="MWM_help", title="Help Screen", type="MWM_help" %}
+    {% include "modal.html" %}
+{% endwith %}
