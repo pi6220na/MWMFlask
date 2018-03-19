@@ -30,11 +30,6 @@ def get_places(location, radius):
     return queried_places
 
 
-def get_places_by_type(place_type: str) -> [Place]:
-
-    return []
-
-
 def get_cached_by_radius(location: tuple, search_radius) -> list:
     """ This function was adapted from:
     https://stackoverflow.com/questions/21042418/mysql-select-coordinates-within-range
@@ -220,6 +215,20 @@ def update_expired_place(place: Place):
     db.execute_query(update_qry, args)
 
 
+def build_cache(location: tuple, radius: int):
+    place_list = get_places(location, radius)
+    for p in place_list:
+        new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
+        db.execute_query(new_qry, p.get_database_args())
+
+        new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
+
+        for t in p.types:
+            if t in type_strings:
+                t_id = type_strings.index(t) + 1
+                db.execute_query(new_type_qry, (p.place_id, t_id))
+
+
 if __name__ == '__main__':
 
     print("test")
@@ -235,10 +244,7 @@ if __name__ == '__main__':
 
     cords = (latitude, lng)
 
-
-    places_list = get_places(cords, rad)
-
-    print(places_list)
+    build_cache(cords, rad)
 
     # pl_list = google_places_request(cords, rad, "restaurant")
     # print("pl_list: ")
@@ -269,18 +275,18 @@ if __name__ == '__main__':
     # print("count:")
     # print(len(rs))
     #
-    print("places from api: ")
-    for p in places_list:
-        print(p.types)
-        print(p.name)
-        new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
-        db.execute_query(new_qry, p.get_database_args())
-
-        new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
-
-        for t in p.types:
-            if t in type_strings:
-                t_id = type_strings.index(t) + 1
-                db.execute_query(new_type_qry, (p.place_id, t_id))
-
+    # print("places from api: ")
+    # for p in places_list:
+    #     print(p.types)
+    #     print(p.name)
+    #     new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
+    #     db.execute_query(new_qry, p.get_database_args())
+    #
+    #     new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
+    #
+    #     for t in p.types:
+    #         if t in type_strings:
+    #             t_id = type_strings.index(t) + 1
+    #             db.execute_query(new_type_qry, (p.place_id, t_id))
+    #
 
