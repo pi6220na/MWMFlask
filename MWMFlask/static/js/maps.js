@@ -1,4 +1,6 @@
 var map;
+var markers = [];
+var user_location;
 
 function initMap() {
     var mpls = {lat: 45.000, lng: -93.265};
@@ -68,18 +70,8 @@ function toggle_collapsed() {
     side.classList.toggle("side-menu-border");
 }
 
-function do_search() {
-    alert("search");
-}
-
-
-// function searchBar() {
-//
-// }
-
-
 // adapted from https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
-function getGeolocation(infoWindow, map, callback = null) {
+function getGeolocation(infoWindow = null, map = null, callback = null) {
     let mpls = {lat: 45.000, lng: -93.265};
 
     // Try HTML5 geolocation.
@@ -90,10 +82,19 @@ function getGeolocation(infoWindow, map, callback = null) {
                 lng: position.coords.longitude
             };
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
+            if (infoWindow !== null) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+            }
             map.setCenter(pos);
+
+            user_location = pos;
+
+            alert("user_location in get geo: ");
+            alert(user_location.latitude);
+            alert(user_location.longitude);
+
             if (callback !== null) {
                 callback(pos, map);
             }
@@ -109,21 +110,17 @@ function getGeolocation(infoWindow, map, callback = null) {
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
-    infoWindow.open(map);
+    if (infoWindow !== null) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+    }
 }
 
 function updateMapPins() {
-    var places_list = getCheckedPlacesList();
-
-    var loc = [45.020459, -93.241592];
-
-    var key = document.getElementById("map_key").classList[0];
-
-    getPlacesOfType("restaurant", loc, 500, key);
+    getGeolocation(null, map, refreshMap());
 }
 
 function getCheckedPlacesList() {
@@ -145,29 +142,15 @@ function placePin(obj) {
 }
 
 function getInitialPins(location, map) {
-    // alert("in getInitialPins: ");
-    // alert(location["lat"]);
-
     var lat = location["lat"];
     var lng = location["lng"];
 
-    var types = ["bar", "restaurant"];
+    var types = ["church", "hindu_temple", "mosque", "synagogue", "amusement_park", "aquarium", "park",
+        "zoo", "night_club", "bar", "art_gallery", "movie_theater", "museum", "bakery", "restaurant",
+        "cafe", "meal_takeaway", "bowling_alley", "stadium", "parking", "bus_station", "subway_station"];
 
-    getPlacesFromCache(lat, lng, 10000, types, map, addPinsToMapFromJSON)
-
-}
-
-function getPlacesOfType(type, loc, rad, key) {
-
-    var query_string = `json?location=${loc[0]},${loc[1]}&radius=${rad}&type=${type}&key=${key}`;
-
-    var api_url = `https://maps.googleapis.com/maps/api/place/nearbysearch/${query_string}`;
-
-    alert("in new get pl");
-
-    // alert(query_string);
-    alert(api_url);
-
+    updateCache(lat, lng, 1000,
+    getPlacesFromCache(lat, lng, 1000, types, map, addPinsToMapFromJSON));
 }
 
 
@@ -175,6 +158,8 @@ function getPlacesOfType(type, loc, rad, key) {
 // https://stackoverflow.com/questions/247483/http-get-request-in-javascript
 function getPlacesFromCache(lat, lng, rad, types, map, callback) {
     var xmlHttp = new XMLHttpRequest();
+
+    // alert("places from cache");
 
     var theUrl = "http://127.0.0.1:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
     var types_qry = "";
@@ -189,7 +174,7 @@ function getPlacesFromCache(lat, lng, rad, types, map, callback) {
 
     theUrl += types_qry;
 
-    // alert(theUrl);
+    alert(theUrl);
 
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
@@ -200,7 +185,25 @@ function getPlacesFromCache(lat, lng, rad, types, map, callback) {
     xmlHttp.send(null);
 }
 
-function addPinsToMapFromJSON(json_str, map_obj) {
+function updateCache(lat, lng, rad, callback) {
+    var xmlHttp = new XMLHttpRequest();
+
+    // alert("update cache");
+
+    var url = "http://127.0.0.1:5000/cache/update?lat=" + lat + "&lng=" + lng + "&radius=" + rad * 2;
+
+    // alert(url);
+
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+            callback();
+    };
+
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+}
+
+function addPinsToMapFromJSON(json_str, map) {
     var json_obj = JSON.parse(json_str);
 
     for (var i = 0; i < json_obj.length; i++) {
@@ -224,14 +227,34 @@ function addPinsToMapFromJSON(json_str, map_obj) {
         marker.addListener('click', function () {
             infowindow.open(map, marker);
         });
+
+        markers.push(marker)
     }
+}
 
+function refreshMap(location, map_obj) {
+    var places_list = getCheckedPlacesList();
+    clearAllMapPins();
+    getPlacesFromCache(location[0], location[1], 1000, places_list, map, addPinsToMapFromJSON)
+}
 
-    // var marker = new google.maps.Marker({
-    //     position: mpls,
-    //     map: map
-    // });
+function clearAllMapPins() {
+    clearMarkers();
+    markers = [];
+}
 
+function addPlaceListToMap(loc, map, places) {
 
 }
 
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+    setMapOnAll(null);
+}

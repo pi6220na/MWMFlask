@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify
 import config
+import os
 
 app = Flask(__name__)
 config_object = config.DevelopmentConfig
@@ -10,11 +11,12 @@ from flask_api import status
 from MWMFlask.utils.api import places as place_api
 from MWMFlask.utils.database import users
 from MWMFlask.utils.api import weather
-
+from MWMFlask.utils.logs.path import directory
 import logging.config
-#logging.basicConfig(filename='MWM.log', level=logging.INFO)
-import os
-logging_conf = os.path.join(config._basedir + '\\MWMFlask\\utils\\logs\\log.conf')
+
+logging.basicConfig(filename='MWM.log', level=logging.INFO)
+logging_conf = os.path.join(directory, "log.conf")
+logging_conf = os.path.join(config._basedir, logging_conf)
 logging.config.fileConfig(logging_conf)
 
 
@@ -64,9 +66,6 @@ def query_cache():
 
         if 'lat' in args.keys() and 'lng' in args.keys() and 'radius' in args.keys():
 
-            # print(args)
-            # print()
-
             lat = float(args["lat"])
             lng = float(args["lng"])
             user_location = (lat, lng)
@@ -88,7 +87,29 @@ def query_cache():
         else:
             return jsonify({'error': True, 'message': 'Bad Request'}), status.HTTP_400_BAD_REQUEST
     else:
-        return jsonify({'error': True, 'message': 'Method not allowed'})
+        return jsonify({'error': True, 'message': 'Method not allowed'}), status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@app.route('/cache/update', methods=["POST", "GET"])
+def update_cache():
+    print("in update_cache():")
+    if request.method == "GET":
+        args = request.args
+        if 'lat' in args.keys() and 'lng' in args.keys() and 'radius' in args.keys():
+
+            lat = float(args["lat"])
+            lng = float(args["lng"])
+            user_location = (lat, lng)
+
+            search_radius = int(args["radius"])
+
+            message = place_api.update_cache(user_location, search_radius)
+
+            return message
+        else:
+            return jsonify({'error': True, 'message': 'Bad Request'}), status.HTTP_400_BAD_REQUEST
+    else:
+        return jsonify({'error': True, 'message': 'Method not allowed'}), status.HTTP_405_METHOD_NOT_ALLOWED
 
 
 @app.route('/user/update_password', methods=["POST", "GET"])

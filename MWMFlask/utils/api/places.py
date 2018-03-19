@@ -1,8 +1,9 @@
 from MWMFlask.utils.api import calls
 from MWMFlask.models.places import Place
+from flask import jsonify
 
 
-def get_cached(location: tuple, place_type: str, radius: int):
+def get_cached(location: tuple, place_types: [str], radius: int):
     print("in places.get_cached: ")
 
     print("before calls.get_cached_by_radius: ")
@@ -26,7 +27,12 @@ def get_cached(location: tuple, place_type: str, radius: int):
 
     print("after if")
 
-    return cached
+    pl_list = []
+
+    for t in place_types:
+        pl_list.extend([pl for pl in cached if t in pl.types])
+
+    return pl_list
 
 
 def check_for_expired(cached: [Place]) -> [Place]:
@@ -49,3 +55,8 @@ def parse_request_types(types: str):
     else:
         parsed_types.append(types)
     return parsed_types
+
+
+def update_cache(location, radius):
+    calls.build_cache(location, radius)
+    return jsonify({'error': False, 'message': 'Cache has been updated'})
