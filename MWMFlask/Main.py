@@ -14,7 +14,7 @@ from MWMFlask.utils.api import weather
 from MWMFlask.utils.logs.path import directory
 import logging.config
 
-logging.basicConfig(filename='MWM.log', level=logging.INFO)
+#logging.basicConfig(filename='MWM.log', level=logging.INFO)
 logging_conf = os.path.join(directory, "log.conf")
 logging_conf = os.path.join(config._basedir, logging_conf)
 logging.config.fileConfig(logging_conf)
@@ -142,3 +142,4 @@ def update_password():
 if __name__ == '__main__':
     logging.debug("Starting main Flask program Main.py")
     app.run()
+
