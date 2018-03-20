@@ -26,7 +26,7 @@ function initMap() {
     userIconDiv.index = 1;
     sideMenuDiv.index = 2;
     weatherMenuDiv.index = 3;
-    helperMenuDiv.index = 1;
+    helperMenuDiv.index = 4;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
     map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
@@ -38,14 +38,8 @@ function initMap() {
 }
 
 function UserIcon(controlDiv, map) {
-    // Set CSS for the control border.
-    // var iconUI = document.createElement('div');
-    // iconUI.classList.add("userIcon");
     var iconUI = document.getElementById("userIcon");
-    // var login = document.getElementById("login_modal");
-    // var signup = document.getElementById("signup_modal");
     controlDiv.appendChild(iconUI);
-    // controlDiv.appendChild(login)
 }
 
 function SideMenu(controlDiv, map) {
