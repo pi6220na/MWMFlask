@@ -2,6 +2,7 @@ drop_users = """DROP TABLE IF EXISTS users"""
 drop_cache = """DROP TABLE IF EXISTS cache"""
 drop_cached_type = """DROP TABLE IF EXISTS cached_type"""
 drop_type_ids = """DROP TABLE IF EXISTS place_types"""
+drop_favorites = """DROP TABLE IF EXISTS favorites"""
 
 create_users = """
 CREATE TABLE users(
@@ -54,8 +55,23 @@ CREATE TABLE place_types(
 )
 """
 
-schema = [drop_users, drop_cache, drop_cached_type, drop_type_ids,
-          create_users, create_cache, create_cached_type, create_type_ids]
+create_favorites = """
+CREATE TABLE favorites(
+    user_id INTEGER NOT NULL,
+    place_id TEXT NOT NULL,
+
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+
+    CONSTRAINT fk_cache
+        FOREIGN KEY (place_id)
+        REFERENCES cache(place_id)
+)
+"""
+
+schema = [drop_users, drop_cache, drop_cached_type, drop_type_ids, drop_favorites,
+          create_users, create_cache, create_cached_type, create_type_ids, create_favorites]
 
 admin_one = """
 INSERT INTO users ( email, email_confirmed, admin,

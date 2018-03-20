@@ -11,7 +11,7 @@
                     {% for place in places %}
                         <li>
                             <input id="{{ place.types[0] }}_id" type="checkbox" name="{{ place.types[0] }}"
-                                   onclick="updateMapPins()" checked>
+                                   onclick="updateShownMapPins()" checked>
                             <label for="{{ place.types[0] }}_id">{{ place.name }}</label>
                         </li>
                     {% endfor %}

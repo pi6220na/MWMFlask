@@ -10,6 +10,9 @@
                 <a href="javascript:void(0)">ADMIN</a>
             {% endif %}
             <a href="{{ url_for('user') }}">ACCOUNT</a>
+            {% if favorites %}
+                <a href="javascript:void(0)" onclick="showModal('favorites_modal')">FAVORITES</a>
+            {% endif %}
             <a href="{{ url_for('logout') }}">LOGOUT</a>
         </div>
     </div>
@@ -17,6 +20,10 @@
 
 {#<span id="login_modal"></span>#}
 {#<span id="signup_modal"></span>#}
+
+{% with id="favorites_modal", title="Favorites", type="favorites" %}
+    {% include "modal.html" %}
+{% endwith %}
 
 {% else %}
 

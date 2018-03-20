@@ -240,7 +240,7 @@ if __name__ == '__main__':
 
     latitude = 44.973456
     lng = -93.283136
-    rad = 10000
+    rad = 100000
 
     cords = (latitude, lng)
 
