@@ -34,7 +34,7 @@ def home():
 
     # favorites = ["one", "two", "three"]
 
-    logging.debug("About to render index.html")
+    # logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
                            w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
