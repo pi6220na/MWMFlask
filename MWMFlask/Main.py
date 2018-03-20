@@ -11,8 +11,9 @@ from flask_api import status
 from MWMFlask.utils.api import places as place_api
 from MWMFlask.utils.database import users
 from MWMFlask.utils.api import weather
-from MWMFlask.utils.logs.path import directory
-import logging.config
+# from MWMFlask.utils.logs.path import directory
+# import logging.config
+
 
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)
 logging_conf = os.path.join(directory, "log.conf")
@@ -25,12 +26,20 @@ def home():
     w_curr = weather.w_current()
     w_list = weather.w_forecast()
     w_mplsRadar = weather.w_radar()
+
+    if 'logged_in' in session.keys():
+        favorites = users.get_favorites(session["user_id"])
+    else:
+        favorites = None
+
+    # favorites = ["one", "two", "three"]
+
     logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
-                           w_curr=w_curr, w_list=w_list, w_mplsRadar=w_mplsRadar)
+                           w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
 
-
+  
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
@@ -139,7 +148,28 @@ def update_password():
         return redirect(url_for("user")), status.HTTP_405_METHOD_NOT_ALLOWED
 
 
+@app.route('/user/fav/add/<place_id>', methods=["POST", "GET"])
+def add_favorite(place_id):
+    print("in add favorite")
+    print(session.keys())
+    if "logged_in" in session.keys() and \
+       session["logged_in"]:
+        print(place_id)
+        print(session.keys())
+        print(session["user_id"])
+
+        usr_id = session["user_id"]
+
+        users.add_favorite(user_id=usr_id, place_id=place_id)
+
+        # return jsonify({'error': False, 'message': 'Favorite Added'}), status.HTTP_200_OK
+
+        return redirect(url_for("home"))
+    else:
+        return redirect(url_for("home"))
+
+
 if __name__ == '__main__':
-    logging.debug("Starting main Flask program Main.py")
+    # logging.debug("Starting main Flask program Main.py")
     app.run()
 
