@@ -14,19 +14,19 @@ Project dependencies are listed in the "requirements.txt" file.
 Two API keys are required: One for [Google Maps/Places/Heatmap](https://developers.google.com/maps/documentation/javascript/get-api-key) and one for [Wunderground Weather API](https://www.wunderground.com/weather/api/d/docs?MR=1)
 
 ## Example Screen Shots:
-<img src="./MWMFlask Main page.png" width="600" height="300"/>
+<img src="/MWMFlask Main page.png" width="600" height="300"/>
 <br>
-<img src="./MWMFlask Signup.png" />
+<img src="/MWMFlask Signup.png" />
 <br>
-<img src="./MWMFlask Login.png" />
+<img src="/MWMFlask Login.png" />
 <br>
-<img src="./MWMFlask Help Screen.png" />
+<img src="/MWMFlask Help Screen.png" />
 <br>
-<img src="./MWMFlask Forecast Weather.png" />
+<img src="/MWMFlask Forecast Weather.png" />
 <br>
-<img src="./MWMFlask Current Weather.png" />
+<img src="/MWMFlask Current Weather.png" />
 <br>
-<img src="./MWMFlask Radar.png" />
+<img src="/MWMFlask Radar.png" />
 <br>
-<img src="./MWMFlask Hamburger Menu.png" />
+<img src="/MWMFlask Hamburger Menu.png" />
 <br>
