@@ -14,4 +14,4 @@ Project dependencies are listed in the "requirements.txt" file.
 Two API keys are required: One for [Google Maps/Places/Heatmap](https://developers.google.com/maps/documentation/javascript/get-api-key) and one for [Wunderground Weather API](https://www.wunderground.com/weather/api/d/docs?MR=1)
 
 ## Example Screen Shots:
-[text](http:./Screenshots/MFMFlask%20Help%20Screen.PNG
+[text](http://Screenshots/MFMFlask%20Help%20Screen.PNG
