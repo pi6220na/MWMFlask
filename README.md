@@ -15,18 +15,18 @@ Two API keys are required: One for [Google Maps/Places/Heatmap](https://develope
 
 ## Example Screen Shots:
 
-[Main Page](/Screenshots/MWMFlask%20Min%20page.PNG?raw=true)
+![Main Page](Screenshots/MWMFlask%20Main%20page.PNG?raw=true)
 
-[Help Screen](/Screenshots/MFMFlask%20Help%20Screen.PNG?raw=true)
+![Help Screen](/Screenshots/MFMFlask%20Help%20Screen.PNG?raw=true)
 
-[Current Weather](/Screenshots/MWMFlask%20Current%20Weather.PNG?raw=true)
+![Current Weather](/Screenshots/MWMFlask%20Current%20Weather.PNG?raw=true)
 
-[Forecast Weather](/Screenshots/MWMFlask%20Forecast%20Weather.PNG?raw=true)
+![Forecast Weather](/Screenshots/MWMFlask%20Forecast%20Weather.PNG?raw=true)
 
-[Hamburger Menu](/Screenshots/MWMFlask%20Hamburger%20Menu.PNG?raw=true)
+![Hamburger Menu](/Screenshots/MWMFlask%20Hamburger%20Menu.PNG?raw=true)
 
-[Login](/Screenshots/MWMFlask%20Login.PNG?raw=true)
+![Login](/Screenshots/MWMFlask%20Login.PNG?raw=true)
 
-[Radar](/Screenshots/MWMFlask%20Radar.PNG?raw=true)
+![Radar](/Screenshots/MWMFlask%20Radar.PNG?raw=true)
 
-[Signup](/Screenshots/MWMFlask%20Signup.PNG?raw=true)
+![Signup](/Screenshots/MWMFlask%20Signup.PNG?raw=true)
