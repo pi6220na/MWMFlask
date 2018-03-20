@@ -22,6 +22,7 @@ from MWMFlask.utils.api import weather
 
 @app.route('/')
 def home():
+    w_curr = weather.w_current()
     w_list = weather.w_forecast()
     w_mplsRadar = weather.w_radar()
 
@@ -32,11 +33,12 @@ def home():
 
     # favorites = ["one", "two", "three"]
 
+    logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
                            w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
 
-
+  
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
