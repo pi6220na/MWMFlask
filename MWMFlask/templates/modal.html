@@ -25,6 +25,10 @@
                     <button class="modal-button">signup</button>
                     <span style="clear: both"></span>
                 </form>
+            {% elif type == "favorites" %}
+                {% for favorite in favorites %}
+                    {{ favorite.name }}<br>
+                {% endfor %}
             {% elif type == "w_forecast" %}
                 <style>
                     /* Modal text */
@@ -106,5 +110,3 @@
         </div>
     </div>
 </div>
-
-

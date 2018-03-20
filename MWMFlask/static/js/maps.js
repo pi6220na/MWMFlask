@@ -1,5 +1,6 @@
 var map;
 var markers = [];
+var markerWindow = [];
 var user_location;
 
 function initMap() {
@@ -82,30 +83,30 @@ function getGeolocation(infoWindow = null, map = null, callback = null) {
                 lng: position.coords.longitude
             };
 
-            if (infoWindow !== null) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent('Location found.');
-                infoWindow.open(map);
-            }
-            map.setCenter(pos);
+            // if (infoWindow !== null) {
+            //     infoWindow.setPosition(pos);
+            //     infoWindow.setContent('Location found.');
+            //     infoWindow.open(map);
+            // }
 
+            map.setCenter(pos);
             user_location = pos;
 
-            alert("user_location in get geo: ");
-            alert(user_location.latitude);
-            alert(user_location.longitude);
+            // alert("user_location in get geo: ");
+            // alert(user_location.latitude);
+            // alert(user_location.longitude);
 
             if (callback !== null) {
                 callback(pos, map);
             }
         }, function () {
             callback(mpls, map);
-            handleLocationError(true, infoWindow, map.getCenter());
+            // handleLocationError(true, infoWindow, map.getCenter());
         });
     } else {
         // Browser doesn't support Geolocation
         callback(mpls, map);
-        handleLocationError(false, infoWindow, map.getCenter());
+        // handleLocationError(false, infoWindow, map.getCenter());
     }
 }
 
@@ -119,11 +120,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     }
 }
 
-function updateMapPins() {
-    getGeolocation(null, map, refreshMap());
-}
-
-function getCheckedPlacesList() {
+function getCheckedPlacesTypeList() {
     var place_types = [];
     var inputs = document.getElementsByTagName("input");
 
@@ -174,7 +171,7 @@ function getPlacesFromCache(lat, lng, rad, types, map, callback) {
 
     theUrl += types_qry;
 
-    alert(theUrl);
+    // alert(theUrl);
 
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
@@ -204,6 +201,7 @@ function updateCache(lat, lng, rad, callback) {
 }
 
 function addPinsToMapFromJSON(json_str, map) {
+    // alert(json_str);
     var json_obj = JSON.parse(json_str);
 
     for (var i = 0; i < json_obj.length; i++) {
@@ -214,38 +212,70 @@ function addPinsToMapFromJSON(json_str, map) {
 
         var contentString = mkr.name;
 
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
+
+        contentString += "<br><form action='/user/fav/add/" + mkr.place_id;
+        contentString += "'><button>Add Favorite</button></form>"
+
+        // alert(mkr.place_types);
+
+        // markerWindow.push(i);
+        //
+        // alert(markerWindow);
+
+
+        // markerWindow.push(new google.maps.InfoWindow({
+        //     content: contentString
+        // }));
+
+        // alert(markerWindow[i].content);
 
         var marker = new google.maps.Marker({
             position: mkr.location,
             map: map,
-            title: mkr.name
+            title: mkr.name,
+            place_types: mkr.place_types
         });
 
-        marker.addListener('click', function () {
-            infowindow.open(map, marker);
+
+        marker.infoWindow = new google.maps.InfoWindow({
+            content: contentString
         });
 
-        markers.push(marker)
+        // marker.addListener('click', function () {
+        //     this.infowindow.open(map, this);
+        //     // infowindow.open(map, this.infoWindow);
+        // });
+
+        google.maps.event.addListener(marker, 'click', function () {
+                                this.infoWindow.open(map, this);
+                            });
+
+        markers.push(marker);
+        // markers[i].addListener('click', function () {
+        //     markerWindow[i].open(map, markers[i]);
+        // })
+
     }
 }
 
-function refreshMap(location, map_obj) {
-    var places_list = getCheckedPlacesList();
-    clearAllMapPins();
-    getPlacesFromCache(location[0], location[1], 1000, places_list, map, addPinsToMapFromJSON)
-}
 
-function clearAllMapPins() {
+function updateShownMapPins() {
     clearMarkers();
-    markers = [];
+    var places_type_list = getCheckedPlacesTypeList();
+    addPinsFromList(places_type_list)
 }
 
-function addPlaceListToMap(loc, map, places) {
 
+function addPinsFromList(places_list) {
+    for (var i = 0; i < places_list.length; i++) {
+        for (var j = 0; j < markers.length; j++) {
+            if (arrayContains(places_list[i], markers[j].place_types)) {
+                markers[j].setMap(map)
+            }
+        }
+    }
 }
+
 
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {
@@ -257,4 +287,24 @@ function setMapOnAll(map) {
 // Removes the markers from the map, but keeps them in the array.
 function clearMarkers() {
     setMapOnAll(null);
+}
+
+// taken from:
+// some stack exchane article i can't find now, but not mine
+function arrayContains(needle, arrhaystack) {
+    return (arrhaystack.indexOf(needle) > -1);
+}
+
+function addToFavorites(place_id) {
+    // alert(place_id);
+    var xmlHttp = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/user/fav/add/" + place_id;
+
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+            callback();
+    };
+
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
 }
