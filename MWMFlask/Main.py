@@ -16,9 +16,13 @@ from MWMFlask.utils.api import weather
 
 
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)
-logging_conf = os.path.join(directory, "log.conf")
-logging_conf = os.path.join(config._basedir, logging_conf)
-logging.config.fileConfig(logging_conf)
+# logging_conf = os.path.join(directory, "log.conf")
+# logging_conf = os.path.join(config._basedir, logging_conf)
+# logging.config.fileConfig(logging_conf)
+#logging.basicConfig(filename='MWM.log', level=logging.INFO)
+#logging_conf = os.path.join(directory, "log.conf")
+#logging_conf = os.path.join(config._basedir, logging_conf)
+#logging.config.fileConfig(logging_conf)
 
 
 @app.route('/')
@@ -39,7 +43,7 @@ def home():
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
                            w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
 
-  
+
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
