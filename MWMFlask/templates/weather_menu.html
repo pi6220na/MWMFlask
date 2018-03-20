@@ -1,0 +1,22 @@
+<div id="weather-menu">
+    <div class="dropdown">
+        <button class="dropbtn userIconText"><i class="fas fa-bolt"></i></button>
+        <div class="right dropdown-content">
+            <a href="javascript:void(0)" onclick="showModal('w_current')">CURRENT</a>
+            <a href="javascript:void(0)" onclick="showModal('w_forecast')">FORECAST</a>
+            <a href="javascript:void(0)" onclick="showModal('w_radar')">RADAR</a>
+        </div>
+    </div>
+</div>
+
+{% with id="w_current", title="Current Conditions", type="w_current" %}
+    {% include "modal.html" %}
+{% endwith %}
+
+{% with id="w_forecast", title="Forecast Conditions", type="w_forecast" %}
+    {% include "modal.html" %}
+{% endwith %}
+
+{% with id="w_radar", title="Radar", type="w_radar" %}
+    {% include "modal.html" %}
+{% endwith %}

@@ -2,6 +2,7 @@ from flask import session, redirect, url_for
 from MWMFlask.utils.database import connection as db
 # import MWMFlask.utils.database.connection as db
 import MWMFlask.utils.secrets.users as secrets
+from MWMFlask.utils.api import places as places
 from MWMFlask.models.users import User
 import time
 
@@ -9,9 +10,15 @@ import time
 def valid_password(email, password):
     """ tests if the given password given matches the hash in the db for the given user """
     login_qry = "SELECT hash FROM users WHERE email = ?"
-    hashed = db.get_rs(login_qry, (email,))[0]
-    if secrets.checkpw(password, hashed):
-        return True
+    password_rs = db.get_rs(login_qry, (email,))
+    print(password_rs)
+    print(type(password_rs))
+    if password_rs:
+        hashed = db.get_rs(login_qry, (email,))[0]
+        if secrets.checkpw(password, hashed):
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -102,3 +109,26 @@ def end_session():
     return {"error": False, "message": "User logged out."}
 
 
+def get_favorites(user_id):
+    get_fave_qry = "SELECT place_id FROM favorites WHERE user_id = ?"
+    faves = db.get_rs(get_fave_qry, (user_id,))
+
+    favorites = []
+
+    print(faves)
+
+    if len(faves) == 1:
+        for f in faves:
+            print(f)
+            favorites.append(places.get_cached_place_by_id(f))
+    elif len(faves) > 1:
+        for f in faves:
+            print(f[0])
+            favorites.append(places.get_cached_place_by_id(f[0]))
+
+    return favorites
+
+
+def add_favorite(user_id, place_id):
+    add_fave_qry = "INSERT INTO favorites (user_id, place_id) VALUES (?, ?)"
+    db.execute_query(add_fave_qry, (user_id, place_id))

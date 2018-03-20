@@ -25,6 +25,71 @@
                     <button class="modal-button">signup</button>
                     <span style="clear: both"></span>
                 </form>
+            {% elif type == "favorites" %}
+                {% for favorite in favorites %}
+                    {{ favorite.name }}<br>
+                {% endfor %}
+            {% elif type == "w_current" %}
+                <form method="post" action="/w_current">
+                    <div class="a">
+                        <h3>Current Conditions</h3>
+                    </div>
+                    {% for list in w_curr %}
+                        <p>Date/Time: {{ list['wc_date_time']}}</p>
+                        <p>Location: {{ list['wc_disp_location']}}</p>
+                        <p>Latitude: {{ list['wc_lat']}}</p>
+                        <p>Longitude: {{ list['wc_lon']}}</p>
+                        <p>Conditions: {{ list['wc_condition']}}</p>
+                        <img src="{{ list['wc_condition_url']}}">
+                        <p>Temp(f): {{ list['wc_temp_f']}}</p>
+                        <p>Heat Index(f): {{ list['wc_heat_index']}}</p>
+                        <p>Wind Chill(f): {{ list['wc_wind_chill']}}</p>
+                        <p>Baro Pressure(in): {{ list['wc_pressure_in']}}</p>
+                        <p>Relative Humidity: {{ list['wc_rel_humidity']}}</p>
+                        <p>Wind Direction: {{ list['wc_wind_dir']}}</p>
+                        <p>Wind Speed: {{ list['wc_wind_mph']}}mph</p>
+                        <br><br>
+                        <div class="a">
+                            <img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" width="200">
+                        </div>
+                    {% endfor %}
+                </form>
+            {% elif type == "w_forecast" %}
+                <form method="post" action="/w_forecast">
+                    <div class="a">
+                        <h3>Forecast Conditions</h3>
+                    </div>
+                    {% for list in w_list %}
+                        <p>Date/Time: {{ list['w_date']}}</p>
+                        <p>Week Day: {{ list['w_day']}}</p>
+                        <p>Conditions: {{ list['w_conditions']}}</p>
+                        <img src="{{ list['w_conditions_url']}}">
+                        <p>High Temp(f): {{ list['w_high_temp']}}</p>
+                        <p>Low Temp(f): {{ list['w_low_temp']}}</p>
+                        <p>Wind Direction: {{ list['w_wind_dir']}}</p>
+                        <p>Wind Speed: {{ list['w_wind_speed']}}mph</p>
+                        <p>Avg. Humidity: {{ list['w_avehumidity']}}%</p>
+                        <br><br>
+                    {% endfor %}
+                    <div class="a">
+                        <img src="https://icons.wxug.com/logos/JPG/wundergroundLogo_4c_horz.jpg" width="200">
+                    </div>
+                </form>
+            {% elif type == "w_radar" %}
+                <div style="min-width: auto">
+                    <form method="post" action="/w_radar">
+                        <div class="a">
+                            <h3>Weather Radar</h3>
+                        </div>
+                        <img src="{{ w_mplsRadar }}">
+                    </form>
+                </div>
+             {% elif type == "MWM_help" %}
+                <div style="min-width: auto">
+                    <div class="a">
+                        {% include "help_window.html" %}
+                    </div>
+                </div>
             {% else %}
                 {{ message }}
             {% endif %}

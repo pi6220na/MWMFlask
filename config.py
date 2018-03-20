@@ -11,10 +11,13 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
-    SECRET_KEY = "testing"
+    SECRET_KEY = "testing_secret_key"
 
     # API Keys
     GOOGLE_MAP_KEY = os.environ['MAP_API']
+
+    # Weather Undergound https://www.wunderground.com/weather/api/d/docs?d=index
+    WEATHER_DATA_KEY = os.environ['WEATHER_API']
 
     # database configuration
     DATABASE_URI = "sqlite:///:memory:"

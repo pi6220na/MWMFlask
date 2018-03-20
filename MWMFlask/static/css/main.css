@@ -56,6 +56,7 @@
 
 }
 
+
 .userIconText {
     font-size: var(--icon-font-size);
     /*line-height: 38px;*/
@@ -167,8 +168,12 @@
     /*left: 0em;*/
     /*right: 0em;*/
     margin: 3em auto;
-    min-width: 10em;
-    max-width: 20em;
+
+    /*min-width: 10em;
+    max-width: 20em;*/
+    min-width: fit-content;
+    max-width: fit-content;
+
     /*max-width: 30em;*/
     /*height: 15em;*/
     border: 2px solid var(--dark-font);
@@ -277,6 +282,7 @@
     right: var(--side-menu-border-width);
     top: 5em;
     bottom: calc(5em + 4em);
+    overflow-y: auto;
 }
 
 .expandable-foot {
@@ -302,4 +308,27 @@
 
 .side-menu-border {
     border-right: var(--side-menu-border-width) solid var(--dark-main);
+}
+
+/* Modal text */
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+div.a {
+    text-align: center;
+}
+div.b {
+    text-align: left;
+}
+div.c {
+    text-align: right;
+}
+div.d {
+    text-align: justify;
 }
