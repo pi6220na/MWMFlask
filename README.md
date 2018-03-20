@@ -15,7 +15,7 @@ Two API keys are required: One for [Google Maps/Places/Heatmap](https://develope
 
 ## Example Screen Shots:
 
-![Main Page](Screenshots/MWMFlask%20Main%20page.PNG?raw=true)
+![Main Page](/Screenshots/MWMFlask%20Main%20page.PNG?raw=true)
 
 ![Help Screen](/Screenshots/MFMFlask%20Help%20Screen.PNG?raw=true)
 
