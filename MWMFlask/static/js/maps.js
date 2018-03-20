@@ -1,7 +1,7 @@
 var map;
 var markers = [];
-var markerWindow = [];
 var user_location;
+var heatmap;
 
 function initMap() {
     var mpls = {lat: 45.000, lng: -93.265};
@@ -12,12 +12,20 @@ function initMap() {
         styles: style
     });
 
+    // heatmap = new google.maps.visualization.HeatmapLayer();
+
+        // data: getPoints(),
+        // map: map
+    // });
+    // heatmap.setMap(map);
+
     // Create the DIV to hold the control and call the CenterControl()
     // constructor passing in this DIV.
     var userIconDiv = document.createElement('div');
     var sideMenuDiv = document.createElement('div');
     var weatherMenuDiv = document.createElement('div');
     var helperMenuDiv = document.createElement('div');
+    var heatMenuDiv = document.createElement('div');
     var userIcon = new UserIcon(userIconDiv, map);
     var sideMenu = new SideMenu(sideMenuDiv, map);
     var weatherMenu = new WeatherMenu(weatherMenuDiv, map);
@@ -26,26 +34,35 @@ function initMap() {
     userIconDiv.index = 1;
     sideMenuDiv.index = 2;
     weatherMenuDiv.index = 3;
-    helperMenuDiv.index = 1;
+    helperMenuDiv.index = 4;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userIconDiv);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(sideMenuDiv);
     map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(helperMenuDiv);
 
+
     var infoWindow = new google.maps.InfoWindow;
     getGeolocation(infoWindow, map, getInitialPins);
 
+    function toggleHeatmap() {
+        heatmap.setMap(heatmap.getMap() ? null : map);
+    }
+
+    function changeRadius() {
+        heatmap.set('radius', heatmap.get('radius') ? null : 20);
+    }
+
+    function changeOpacity() {
+        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+    }
+
+
 }
 
+
 function UserIcon(controlDiv, map) {
-    // Set CSS for the control border.
-    // var iconUI = document.createElement('div');
-    // iconUI.classList.add("userIcon");
     var iconUI = document.getElementById("userIcon");
-    // var login = document.getElementById("login_modal");
-    // var signup = document.getElementById("signup_modal");
     controlDiv.appendChild(iconUI);
-    // controlDiv.appendChild(login)
 }
 
 function SideMenu(controlDiv, map) {
@@ -63,6 +80,10 @@ function HelperMenu(controlDiv, map) {
     controlDiv.appendChild(helperUI)
 }
 
+function HeatMenu(controlDiv, map) {
+    var heatUI = document.getElementById("heat-menu");
+    controlDiv.appendChild(heatUI)
+}
 
 function expand_menu() {
     toggle_collapsed();
@@ -91,13 +112,13 @@ function getGeolocation(infoWindow = null, map = null, callback = null) {
                 lng: position.coords.longitude
             };
 
-            // if (infoWindow !== null) {
-            //     infoWindow.setPosition(pos);
-            //     infoWindow.setContent('Location found.');
-            //     infoWindow.open(map);
-            // }
-
+            if (infoWindow !== null) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+            }
             map.setCenter(pos);
+
             user_location = pos;
 
             // alert("user_location in get geo: ");
@@ -143,8 +164,7 @@ function getCheckedPlacesTypeList() {
     return place_types;
 }
 
-function placePin(obj) {
-}
+
 
 function getInitialPins(location, map) {
     var lat = location["lat"];
@@ -156,6 +176,8 @@ function getInitialPins(location, map) {
 
     updateCache(lat, lng, 1000,
     getPlacesFromCache(lat, lng, 1000, types, map, addPinsToMapFromJSON));
+
+
 }
 
 
@@ -164,7 +186,7 @@ function getInitialPins(location, map) {
 function getPlacesFromCache(lat, lng, rad, types, map, callback) {
     var xmlHttp = new XMLHttpRequest();
 
-    // alert("places from cache");
+
 
     var theUrl = "http://127.0.0.1:5000/cache?lat=" + lat + "&lng=" + lng + "&radius=" + rad;
     var types_qry = "";
@@ -193,11 +215,11 @@ function getPlacesFromCache(lat, lng, rad, types, map, callback) {
 function updateCache(lat, lng, rad, callback) {
     var xmlHttp = new XMLHttpRequest();
 
-    // alert("update cache");
+
 
     var url = "http://127.0.0.1:5000/cache/update?lat=" + lat + "&lng=" + lng + "&radius=" + rad * 2;
 
-    // alert(url);
+
 
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
@@ -209,14 +231,13 @@ function updateCache(lat, lng, rad, callback) {
 }
 
 function addPinsToMapFromJSON(json_str, map) {
-    // alert(json_str);
     var json_obj = JSON.parse(json_str);
 
     for (var i = 0; i < json_obj.length; i++) {
 
         var mkr = json_obj[i];
 
-        // alert(JSON.stringify(mkr));
+
 
         var contentString = mkr.name;
 
@@ -224,18 +245,6 @@ function addPinsToMapFromJSON(json_str, map) {
         contentString += "<br><form action='/user/fav/add/" + mkr.place_id;
         contentString += "'><button>Add Favorite</button></form>"
 
-        // alert(mkr.place_types);
-
-        // markerWindow.push(i);
-        //
-        // alert(markerWindow);
-
-
-        // markerWindow.push(new google.maps.InfoWindow({
-        //     content: contentString
-        // }));
-
-        // alert(markerWindow[i].content);
 
         var marker = new google.maps.Marker({
             position: mkr.location,
@@ -249,23 +258,22 @@ function addPinsToMapFromJSON(json_str, map) {
             content: contentString
         });
 
-        // marker.addListener('click', function () {
-        //     this.infowindow.open(map, this);
-        //     // infowindow.open(map, this.infoWindow);
-        // });
-
         google.maps.event.addListener(marker, 'click', function () {
                                 this.infoWindow.open(map, this);
                             });
 
         markers.push(marker);
-        // markers[i].addListener('click', function () {
-        //     markerWindow[i].open(map, markers[i]);
-        // })
 
     }
-}
 
+
+
+    heatmap = new google.maps.visualization.HeatmapLayer({
+        data: getPoints(),
+        map: map
+    });
+    heatmap.setMap(map);
+}
 
 function updateShownMapPins() {
     clearMarkers();
@@ -315,4 +323,23 @@ function addToFavorites(place_id) {
 
     xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
+}
+
+function getPoints() {
+
+    var heat_map_pins = [];
+
+    for (var i = 0; i < markers.length; i ++) {
+
+        var location = markers[i].position;
+
+        var str_loc = JSON.stringify(location);
+
+        var lng = parseFloat(JSON.parse(str_loc).lng);
+        var lat = parseFloat(JSON.parse(str_loc).lat);
+
+        heat_map_pins.push(new google.maps.LatLng(lat, lng))
+    }
+
+    return heat_map_pins;
 }

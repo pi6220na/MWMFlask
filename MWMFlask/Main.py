@@ -16,9 +16,13 @@ import logging.config
 
 
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)
-logging_conf = os.path.join(directory, "log.conf")
-logging_conf = os.path.join(config._basedir, logging_conf)
-logging.config.fileConfig(logging_conf)
+# logging_conf = os.path.join(directory, "log.conf")
+# logging_conf = os.path.join(config._basedir, logging_conf)
+# logging.config.fileConfig(logging_conf)
+#logging.basicConfig(filename='MWM.log', level=logging.INFO)
+#logging_conf = os.path.join(directory, "log.conf")
+#logging_conf = os.path.join(config._basedir, logging_conf)
+#logging.config.fileConfig(logging_conf)
 
 
 
@@ -35,12 +39,12 @@ def home():
 
     # favorites = ["one", "two", "three"]
 
-    logging.debug("About to render index.html")
+    # logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
                            w_curr=w_curr, w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
 
-  
+
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
