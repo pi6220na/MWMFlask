@@ -16,14 +16,14 @@ import logging.config
 
 
 #logging.basicConfig(filename='MWM.log', level=logging.INFO)
-# logging_conf = os.path.join(directory, "log.conf")
-# logging_conf = os.path.join(config._basedir, logging_conf)
-# logging.config.fileConfig(logging_conf)
-#logging.basicConfig(filename='MWM.log', level=logging.INFO)
-#logging_conf = os.path.join(directory, "log.conf")
-#logging_conf = os.path.join(config._basedir, logging_conf)
-#logging.config.fileConfig(logging_conf)
+logging_conf = os.path.join(directory, "log.conf")
+logging.debug('first step building longgin_conf: %s ' % logging_conf)
+logging_conf = os.path.join(config._basedir, logging_conf)
+logging.debug('second step building longgin_conf: %s ' % logging_conf)
+logging.config.fileConfig(logging_conf)
 
+logging.debug('base directory: %s ' % config._basedir)
+logging.debug('current directory: %s ' % os.path.dirname(os.path.realpath(__file__)))
 
 
 @app.route('/')
