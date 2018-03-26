@@ -5,8 +5,7 @@ import json
 from cachepy import *
 from multiprocessing.pool import ThreadPool
 import logging
-import logging.config
-log = logging.getLogger(__name__)
+
 
 api_key = app.config["WEATHER_DATA_KEY"]
 
@@ -44,11 +43,11 @@ def w_get_current():
         w_url = "http://api.wunderground.com/api/"
         w_query = "/conditions/q/MN/Minneapolis.json"
         w_req_url = "{}{}{}".format(w_url, api_key, w_query)
-        logging.info("Forecast url: %s" % w_req_url)
+        logging.info("Current url: %s" % w_req_url)
         f = urlopen(w_req_url)
 
     except URLError as e:
-        log.error(e.reason)
+        logging.error(e.reason)
 
     json_string = f.read()
     parsed_json = json.loads(json_string)
@@ -100,7 +99,7 @@ def w_get_forecast():
         f = urlopen(w_req_url)
 
     except URLError as e:
-        log.error(e.reason)
+        logging.error(e.reason)
 
     json_string = f.read()
     parsed_json = json.loads(json_string)
@@ -144,6 +143,6 @@ def w_radar():
     w_url = "http://api.wunderground.com/api/"
     w_query = "/animatedradar/q/MN/Minneapolis.gif?width=480&height=480&newmaps=1&timelabel=1&timelabel.y=10&num=5&delay=50"
     w_req_url = "{}{}{}".format(w_url, api_key, w_query)
-    logging.debug("Radar url: %s was set, returning to index" % w_req_url)
+    logging.info("Radar url: %s was set, returning to index" % w_req_url)
 
     return w_req_url

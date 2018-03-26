@@ -11,13 +11,19 @@ from flask_api import status
 from MWMFlask.utils.api import places as place_api
 from MWMFlask.utils.database import users
 from MWMFlask.utils.api import weather
-# from MWMFlask.utils.logs.path import directory
-# import logging.config
+from MWMFlask.utils.logs.path import directory
+import logging.config
 
-# logging.basicConfig(filename='logs/MWM.log', level=logging.INFO)
-# logging_conf = os.path.join(directory, "log.conf")
-# logging_conf = os.path.join(config._basedir, logging_conf)
-# logging.config.fileConfig(logging_conf)
+
+#logging.basicConfig(filename='MWM.log', level=logging.INFO)
+logging_conf = os.path.join(directory, "log.conf")
+logging.debug('first step building longgin_conf: %s ' % logging_conf)
+logging_conf = os.path.join(config._basedir, logging_conf)
+logging.debug('second step building longgin_conf: %s ' % logging_conf)
+logging.config.fileConfig(logging_conf)
+
+logging.debug('base directory: %s ' % config._basedir)
+logging.debug('current directory: %s ' % os.path.dirname(os.path.realpath(__file__)))
 
 
 @app.route('/')
@@ -36,9 +42,9 @@ def home():
     # logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
-                           w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
+                           w_curr=w_curr, w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
 
-  
+
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
@@ -171,3 +177,4 @@ def add_favorite(place_id):
 if __name__ == '__main__':
     # logging.debug("Starting main Flask program Main.py")
     app.run()
+
