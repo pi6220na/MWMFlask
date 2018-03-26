@@ -55,7 +55,6 @@ function initMap() {
         heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
     }
 
-
 }
 
 
@@ -264,7 +263,6 @@ function addPinsToMapFromJSON(json_str, map) {
         markers.push(marker);
 
     }
-
 
     heatmap = new google.maps.visualization.HeatmapLayer({
         data: getPoints(),
