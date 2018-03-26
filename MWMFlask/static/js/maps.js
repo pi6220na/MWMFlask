@@ -40,7 +40,6 @@ function initMap() {
     map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(weatherMenuDiv);
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(helperMenuDiv);
 
-
     var infoWindow = new google.maps.InfoWindow;
     getGeolocation(infoWindow, map, getInitialPins);
 
@@ -55,7 +54,6 @@ function initMap() {
     function changeOpacity() {
         heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
     }
-
 
 }
 
@@ -174,8 +172,8 @@ function getInitialPins(location, map) {
         "zoo", "night_club", "bar", "art_gallery", "movie_theater", "museum", "bakery", "restaurant",
         "cafe", "meal_takeaway", "bowling_alley", "stadium", "parking", "bus_station", "subway_station"];
 
-    updateCache(lat, lng, 1000,
-    getPlacesFromCache(lat, lng, 1000, types, map, addPinsToMapFromJSON));
+    updateCache(lat, lng, 4500,
+    getPlacesFromCache(lat, lng, 4500, types, map, addPinsToMapFromJSON));
 
 
 }
@@ -265,8 +263,6 @@ function addPinsToMapFromJSON(json_str, map) {
         markers.push(marker);
 
     }
-
-
 
     heatmap = new google.maps.visualization.HeatmapLayer({
         data: getPoints(),
