@@ -37,9 +37,6 @@ def home():
     else:
         favorites = None
 
-    # favorites = ["one", "two", "three"]
-
-    # logging.debug("About to render index.html")
     return render_template("index.html", title=app.config["APP_TITLE"],
                            places=places, map_key=app.config["GOOGLE_MAP_KEY"],
                            w_curr=w_curr, w_list=w_list, w_mplsRadar=w_mplsRadar, favorites=favorites)
@@ -77,7 +74,6 @@ def user():
 @app.route('/cache', methods=["POST", "GET"])
 def query_cache():
     if request.method == "GET":
-        print(" in if get")
         args = request.args
 
         if 'lat' in args.keys() and 'lng' in args.keys() and 'radius' in args.keys():
@@ -94,10 +90,7 @@ def query_cache():
 
             search_radius = int(args["radius"])
 
-            print("place_types: ")
-            print(place_types)
-
-            cached = place_api.get_cached(user_location, place_types, search_radius)
+            cached = place_api.call_get_cached(user_location, place_types, search_radius)
 
             return jsonify([pl.to_json() for pl in cached]), status.HTTP_200_OK
         else:
@@ -155,19 +148,13 @@ def update_password():
 
 @app.route('/user/fav/add/<place_id>', methods=["POST", "GET"])
 def add_favorite(place_id):
-    print("in add favorite")
     print(session.keys())
     if "logged_in" in session.keys() and \
        session["logged_in"]:
-        print(place_id)
-        print(session.keys())
-        print(session["user_id"])
 
         usr_id = session["user_id"]
 
         users.add_favorite(user_id=usr_id, place_id=place_id)
-
-        # return jsonify({'error': False, 'message': 'Favorite Added'}), status.HTTP_200_OK
 
         return redirect(url_for("home"))
     else:
