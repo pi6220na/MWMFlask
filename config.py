@@ -7,7 +7,7 @@ _basedir = os.path.abspath(os.path.dirname(__file__))
 # Creates the default Config Object
 class Config(object):
     # APP Settings
-    APP_TITLE = "#FirdayNight"  # This is just a placeholder
+    APP_TITLE = "#FridayNight"  # This is just a placeholder
     DEBUG = False
     TESTING = False
 

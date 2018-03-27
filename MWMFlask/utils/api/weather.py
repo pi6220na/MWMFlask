@@ -9,7 +9,7 @@ import logging
 
 api_key = app.config["WEATHER_DATA_KEY"]
 
-cache_with_ttl = Cache(ttl=60) # ttl given in seconds
+cache_with_ttl = Cache(ttl=60)  # ttl given in seconds
 
 
 def w_forecast():
