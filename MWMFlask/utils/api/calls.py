@@ -4,15 +4,7 @@ from MWMFlask.models.places import *
 from MWMFlask.Main import app
 import MWMFlask.utils.database.connection as db
 from MWMFlask.models.places import type_strings
-
-
-def query_api(location, radius: int, place_type: str) -> [dict]:
-    log_api_params(location, radius, place_type)
-    return [{"test": "string"}, {"test": "string"}]
-
-
-def log_api_params(loc, rad, type):
-    pass
+import logging
 
 
 def build_request(request_url, api_route, query_string):
@@ -21,6 +13,7 @@ def build_request(request_url, api_route, query_string):
 
 
 def get_places(location, radius):
+    """ gets places from google in radius of lat and lng """
     queried_places = []
     for t in places:
         qp = google_places_request(location, radius, t.types[0])
@@ -37,7 +30,7 @@ def get_cached_by_radius(location: tuple, search_radius) -> list:
     qry_args = (location[0], location[1], location[0], search_radius/1000)
 
     # sqlite dose not have all the same math functions as mysql
-    # this is a list of python functions tp pass a;ong to sqlite
+    # this is a list of python functions tp pass along to sqlite
     functions = (
         ("ACOS", 1, math.acos),
         ("COS", 1, math.cos),
@@ -59,6 +52,7 @@ def get_cached_by_radius(location: tuple, search_radius) -> list:
 
 
 def places_from_search_results(search_rs):
+    logging.debug("tuning places query into place objects")
     cached_places = []
     for row in search_rs:
         created = row[1]
@@ -82,6 +76,7 @@ def places_from_search_results(search_rs):
 
 
 def google_places_request(location: (float, float), radius: int, place_type: str):
+    logging.debug("Getting places from google places")
 
     places_of_type = []
 
@@ -94,27 +89,17 @@ def google_places_request(location: (float, float), radius: int, place_type: str
 
     pl_type = place_type
 
-    print(pl_type)
-
     pl_url = "https://maps.googleapis.com/"
     pl_route = "maps/api/place/nearbysearch/"
     pl_query = "json?location={},{}&radius={}&type={}&key={}".format(user_lat, user_lng, search_rad, pl_type, api_key)
 
     places_req_url = build_request(pl_url, pl_route, pl_query)
 
-    print(places_req_url)
-
     response = requests.get(places_req_url)
-
-    print(response)
 
     results = response.json()["results"]
 
-    # print(results)
-
     for place in results:
-
-        # print(place)
         coordinates = dict(place["geometry"]["location"])
 
         place_name = place["name"]
@@ -127,8 +112,6 @@ def google_places_request(location: (float, float), radius: int, place_type: str
 
         place_obj = Place(place_name=place_name, place_id=place_id, location=coordinates, place_types=types,
                           address=place_address)
-
-        # place_obj = place_classes[place_type](place_name, place_id, coordinates, place_address)
 
         places_of_type.append(place_obj)
 
@@ -152,21 +135,13 @@ def get_place_by_id(expired_place_id):
 
     request_str = build_request(pl_url, pl_route, pl_query)
 
-    # print(request_str)
-
     resp = requests.get(request_str).json()["result"]
-
-    # print(resp)
 
     name = resp["name"]
     place_id = resp["place_id"]
     address = resp["vicinity"]
     location = resp["geometry"]["location"]
     types = resp["types"]
-
-    # print(name)
-    # print(address)
-    # print(location)
 
     return Place(place_name=name, place_id=place_id, location=location, address=address, place_types=types)
 
@@ -181,8 +156,6 @@ def get_place_from_db_line(rs_line: tuple) -> Place:
 
     type_list = get_types_by_place_id(place_id)
 
-    # print("place_rs in get_place_from_db_line():")
-    # print(type_list)
     return Place(place_name=place_name, place_id=place_id, location=location, address=address, place_types=type_list,
                  created=created)
 
@@ -230,63 +203,4 @@ def build_cache(location: tuple, radius: int):
 
 
 if __name__ == '__main__':
-
-    print("test")
-
-    # pl = get_place_by_id("ChIJP19AyX4ts1IRgll9l0HR8lk")
-
-    # print("place by id: ")
-    # print(pl)
-
-    latitude = 44.973456
-    lng = -93.283136
-    rad = 100000
-
-    cords = (latitude, lng)
-
-    build_cache(cords, rad)
-
-    # pl_list = google_places_request(cords, rad, "restaurant")
-    # print("pl_list: ")
-    # print(pl_list)
-
-    # print(pl_list)
-
-    # places_from_api = get_places(cords, rad)
-    #
-    # old_qry = "SELECT cache_id, place_id, cached_stamp FROM cache"
-    # rs = db.get_rs(old_qry)
-    #
-    # print("get By radius: ")
-    # rs_one = get_cached_by_radius(cords, 1)
-    # print(rs_one)
-    # print("count:")
-    # print(len(rs_one))
-    #
-    # for r in rs_one:
-    #     # print(type(r))
-    #     place_obj = get_place_from_db_line(r)
-    #     print(place_obj.name)
-    #     print(place_obj.place_id)
-    #     print(place_obj.created)
-    #
-    # print("rs: ")
-    # print(rs)
-    # print("count:")
-    # print(len(rs))
-    #
-    # print("places from api: ")
-    # for p in places_list:
-    #     print(p.types)
-    #     print(p.name)
-    #     new_qry = "INSERT INTO cache (name, place_id, latitude, longitude, address) VALUES (?, ?, ?, ?, ?)"
-    #     db.execute_query(new_qry, p.get_database_args())
-    #
-    #     new_type_qry = "INSERT INTO cached_type (place_id, type_id) VALUES (?, ?)"
-    #
-    #     for t in p.types:
-    #         if t in type_strings:
-    #             t_id = type_strings.index(t) + 1
-    #             db.execute_query(new_type_qry, (p.place_id, t_id))
-    #
-
+    pass

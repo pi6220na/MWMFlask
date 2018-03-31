@@ -2,31 +2,29 @@ from MWMFlask.utils.api import calls
 from MWMFlask.models.places import Place
 from flask import jsonify
 from MWMFlask.utils.database import connection as db
+from multiprocessing.pool import ThreadPool
+import logging
+
+
+def call_get_cached(location: tuple, place_types: [str], radius: int):
+
+    # https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread-in-python
+    pool = ThreadPool(processes=1)
+    async_result = pool.apply_async(get_cached, [location, place_types, radius])
+
+    return_val = async_result.get()  # get the return value from your function.
+    return return_val
 
 
 def get_cached(location: tuple, place_types: [str], radius: int):
-    print("in places.get_cached: ")
+    logging.debug("Getting cached places...")
 
-    print("before calls.get_cached_by_radius: ")
-    cached = calls.get_cached_by_radius(location=location, search_radius=radius)  #, place_type=place_type)
-
-    print("cached: ")
-    print(cached)
-
-    print("before check_for_expired: ")
+    cached = calls.get_cached_by_radius(location=location, search_radius=radius)
     expired = check_for_expired(cached)
 
-    print("expired: ")
-    print(expired)
     if len(expired) > 0:
-        print("before calls.get_places_by_id:")
         refreshed = calls.get_places_by_id(expired)
-        print("refreshed: ")
-        print(refreshed)
-        print("before update_records:")
         update_records(refreshed)
-
-    print("after if")
 
     pl_list = []
 
@@ -37,6 +35,8 @@ def get_cached(location: tuple, place_types: [str], radius: int):
 
 
 def check_for_expired(cached: [Place]) -> [Place]:
+    logging.debug("Checking for expired places...")
+
     expired = []
     for record in cached:
         if record.cache_expired():
@@ -45,11 +45,14 @@ def check_for_expired(cached: [Place]) -> [Place]:
 
 
 def update_records(refreshed: [Place]) -> None:
+    logging.debug("Updating cache...")
+
     for place in refreshed:
         calls.update_expired_place(place)
 
 
 def parse_request_types(types: str):
+    logging.debug("parsing tyoes")
     parsed_types = []
     if '-' in types:
         parsed_types = types.split("-")
@@ -59,11 +62,13 @@ def parse_request_types(types: str):
 
 
 def update_cache(location, radius):
+    logging.debug("Updating cache...")
     calls.build_cache(location, radius)
     return jsonify({'error': False, 'message': 'Cache has been updated'})
 
 
 def get_cached_place_by_id(place_id: str) -> Place:
+    logging.debug("Getting places by id")
     cached_qry = "SELECT * FROM cache WHERE place_id = ?"
     rs = db.get_rs(cached_qry, (place_id,))
 
@@ -74,6 +79,7 @@ def get_cached_place_by_id(place_id: str) -> Place:
 
 
 def get_types_by_place_id(place_id: str) -> [str]:
+    logging.debug("geting place tyoes by id")
     place_types_by_id_qry = """
     SELECT DISTINCT pt.place_type
         FROM place_types as pt
@@ -91,7 +97,14 @@ def get_types_by_place_id(place_id: str) -> [str]:
 
 
 if __name__ == '__main__':
-    print(get_cached_place_by_id("ChIJL_d7hr8ts1IRMZfd7ZISHdQ"))
+    # print(get_cached_place_by_id("ChIJL_d7hr8ts1IRMZfd7ZISHdQ"))
+    test_location = (45, -94.23456)
+
+    test_places = ["bar", "restaurant"]
+
+    test_radius = 1000000
+
+    test = call_get_cached(test_location, test_places, test_radius)
     pass
 
 
